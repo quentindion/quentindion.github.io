@@ -1,0 +1,118 @@
+<ng-template #themeMenuTemplate>
+    <ul class="p-3 my-2 rounded-3xl shadow-primer-xl bg-white dark:text-gray-200 dark:bg-gray-900" @panel>
+        <li *ngFor="let item of themes" (click)="item.action()"
+            class="button font-normal">
+            <ng-container [ngSwitch]="item.icon">
+                <i *ngIf="item.icon" class="inline-block align-sub mr-2">{{item.icon}}</i>
+                <span *ngIf="item.icons" class="inline-block align-text-bottom mr-2 feather-mix-to-br">
+                    <i *ngFor="let icon of item.icons" class="text-gray-800 dark:text-gray-200">{{icon}}</i>
+                </span>
+                {{item.name}}
+            </ng-container>
+        </li>
+    </ul>
+</ng-template>
+
+<ng-template #timelineTemplate let-items>
+    <div class="w-full grid grid-cols-1-1-3 gap-6">
+        <ng-container *ngFor="let item of items">
+            <div>
+                <h3 class="text-gray-600 dark:text-gray-400 text-right text-2xl md:text-3xl reveal-date" *ngFor="let date of item.dates">{{date}}</h3>
+            </div>
+            <span class="w-full h-0.5 mt-5 border-b-4 border-gray-300 dark:border-gray-700 border-dotted reveal-date"></span>
+            <div>
+                <h3 class="text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 reveal">{{item.company}}</h3>
+                <h4 class="font-medium text-gray-700 dark:text-gray-300 text-lg mb-4 reveal">{{item.title}}</h4>
+                <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base reveal">{{item.description}}</p>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>
+
+<section class="h-20"></section>
+
+<section class="mx-auto sticky top-0 z-10 max-w-screen-xl container backdrop-blur-md"
+    [ngStyle]="{
+        'maxWidth.%': navScrollProgress.percentBetween(isMd ? 50 : 75, 100),
+        'borderRadius.px': navScrollProgress.percentBetween(0, 40, true),
+        'backgroundColor': 'rgb(var(--nav-background-color) / '+ navScrollProgress.percentBetween(0, 50) +'%)',
+        'boxShadow': '0 '+ navScrollProgress.percentBetween(0, 8) +'px '+ navScrollProgress.percentBetween(0, 24) +'px 0 rgb(var(--shadow-primer-color) / 20%)'
+    }">
+    <nav class="flex items-center justify-between p-4">
+        <div class="flex flex-row gap-2">
+            <a class="icon button rounded-full" (click)="mailMe()" role="navigation" aria-label="Mail">
+                <i>at-sign</i>
+            </a>
+            <a class="icon button rounded-full" href="https://www.linkedin.com/in/quentindion" role="navigation" aria-label="LinkedIn">
+                <i>linkedin</i>
+            </a>
+            <a class="icon button rounded-full" href="https://github.com/quentindion" role="navigation" aria-label="Github">
+                <i>github</i>
+            </a>
+            <a class="icon button rounded-full" href="https://www.youtube.com/@vs2kf" role="navigation" aria-label="Youtube">
+                <i>youtube</i>
+            </a>
+        </div>
+        <div class="flex gap-2">
+            <button [dropdownTriggerFor]="themeMenuTemplate" class="icon rounded-full" aria-label="Switch dark mode">
+                <span class="feather-mix-to-br">
+                    <i class="text-gray-800 dark:text-gray-200">sun</i>
+                    <i class="text-gray-800 dark:text-gray-200">moon</i>
+                </span>
+            </button>
+        </div>
+    </nav>
+</section>
+
+<section class="justify-center py-10 md:py-16 reveal-profile">
+
+    <img src= "assets/profil.webp" alt="Image" class="h-[262px] w-[262px] mx-auto my-8 object-cover object-[center_60%] rounded-full reveal" loading="lazy" />
+    <h1 class="flex justify-center text-gray-600 dark:text-gray-400 text-lg md:text-2xl mb-8 reveal">Quentin Dion</h1>
+
+    <h2 class="flex justify-center md:font-light text-4xl md:text-7xl leading-none mb-8 text-transparent bg-clip-text
+        bg-gradient-to-br from-lime-300 to-gray-300 to-50% dark:from-lime-300/50 dark:to-gray-700 reveal">Lead Web Developer</h2>
+    <p class="flex justify-center text-gray-600 dark:text-gray-400 mb-10 md:mb-16 px-4 reveal">
+        Depuis {{seniority}}ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui
+    </p>
+    <div class="mouse mx-auto reveal"></div>
+</section>
+
+<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 reveal-cards">
+    <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 reveal-title">Compétences</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let skill of skills" class="bg-gray-50 dark:bg-gray-900 px-6 py-8 rounded-xl shadow-primer-lg reveal">
+            <div class="flex flex-row items-start gap-4">
+                <i class="w-20 min-w-[5rem] py-6 flex justify-center bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-xl mb-4 shadow-inner">
+                    {{skill.icon}}
+                </i>
+                <div>
+                    <h4 class="font-medium text-gray-700 dark:text-gray-300 text-lg mb-4">{{skill.category}}</h4>
+                    <div class="text-gray-600 dark:text-gray-400 text-md flex flex-row flex-wrap gap-1">
+                        <span *ngFor="let item of skill.items" class="bg-gray-100 dark:bg-gray-800 text-xs text-center font-medium px-2 py-1 rounded-xl">
+                            {{item}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 text-md">{{skill.description}}</p>
+        </div>
+    </div>
+</section>
+    
+<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 reveal-list">
+    <div class="flex flex-col lg:flex-row justify-between gap-6">
+        <div class="mb-10 lg:mb-0">
+            <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl reveal-title">Expériences</h3>
+        </div>
+        <ng-container *ngTemplateOutlet="timelineTemplate; context: {$implicit: experiences}"></ng-container>
+    </div>
+</section>
+
+<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 reveal-list">
+    <div class="flex flex-col lg:flex-row justify-between gap-6">
+        <div class="mb-10 lg:mb-0">
+            <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl reveal-title">Formations</h3>
+        </div>
+        <ng-container *ngTemplateOutlet="timelineTemplate; context: {$implicit: training}"></ng-container>
+    </div>
+</section>

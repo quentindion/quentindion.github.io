@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Quentin Dion</title>
+    <base href="/">
+    <meta name="description" content="Lead Web Developer">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" >
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script>
+        // It's best to inline this in `head` to avoid FOUC (flash of unstyled content)
+        window.updateTheme = function () {
+            if((window.matchMedia('screen').matches && localStorage.getItem('theme') === 'dark') || 
+                (!('theme' in localStorage) && window.matchMedia('screen and (prefers-color-scheme: dark)').matches))
+                document.documentElement.classList.add('dark');
+            else
+                document.documentElement.classList.remove('dark');
+        };
+        updateTheme();
+      </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

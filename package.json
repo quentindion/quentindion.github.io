@@ -1,0 +1,38 @@
+{
+  "name": "me",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --hmr --disable-host-check --host=0.0.0.0 --public-host=quentindion-solid-winner-v6997gqp9pxcpvpq-4200.preview.app.github.dev",
+    "build": "ng build --configuration production"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^16.0.4",
+    "@angular/cdk": "^16.1.2",
+    "@angular/common": "^16.0.4",
+    "@angular/compiler": "^16.0.4",
+    "@angular/core": "^16.0.4",
+    "@angular/forms": "^16.1.2",
+    "@angular/platform-browser": "^16.0.4",
+    "@angular/platform-browser-dynamic": "^16.1.2",
+    "feather-icons": "^4.29.0",
+    "rxjs": "~7.8.1",
+    "scrollreveal": "^4.0.9",
+    "tslib": "^2.6.0",
+    "zone.js": "^0.13.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^16.1.1",
+    "@angular/cli": "^16.1.1",
+    "@angular/compiler-cli": "^16.1.2",
+    "@tailwindcss/typography": "^0.5.9",
+    "@types/feather-icons": "^4.29.1",
+    "@types/node": "^20.3.2",
+    "@types/scrollreveal": "^0.0.8",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2",
+    "typescript": "~4.9.5"
+  }
+}

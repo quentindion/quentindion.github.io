@@ -1,0 +1,126 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/cdk/overlay-prebuilt.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    :root {
+        --nav-background-color: 255 255 255;
+        --shadow-primer-color: 156 163 175;
+    }
+    
+    html {
+        @apply font-poppins overflow-x-hidden;
+
+        &.dark {
+            --nav-background-color: 3 7 18;
+            --shadow-primer-color: 3 7 18;
+        }
+    }
+
+    body {
+        @apply min-h-screen overflow-x-clip bg-gray-100 dark:bg-gray-800;
+        
+        &::before {
+            @apply content-[''] w-screen h-screen absolute top-0 left-0 bg-gradient-to-br from-blue-500 via-lime-500 via-25% to-50% opacity-25;
+
+            --svg: url(assets/path.svg);
+
+            mask: var(--svg);
+        }
+    }
+
+    a {
+        // @apply relative inline-block cursor-pointer bg-no-repeat bg-[length:200px_2px];
+        
+        // &::before {
+        //     @apply transition-transform duration-500 bg-white/25 bg-gradient-to-r from-cyan-500 to-blue-500;
+
+        //     content: '';
+        //     position: absolute;
+        //     width: 100%;
+        //     height: 2px;
+        //     top: calc(100% + 2px);
+        //     bottom: 0;
+        //     left: 0;
+        //     transform-origin: right;
+        //     transform: scaleX(0);
+        // }
+            
+        // &:hover::before {
+        //     transform-origin: left;
+        //     transform: scaleX(1);
+        // }
+    }
+
+    // *::-webkit-scrollbar { @apply w-4; }
+    // *::-webkit-scrollbar-track { @apply bg-gray-100 dark:bg-gray-800; }
+    // *::-webkit-scrollbar-thumb { @apply bg-gray-500 rounded-xl border-4 border-solid border-gray-100 dark:border-gray-800; }
+}
+
+@layer components {
+
+    button, .button {
+        @apply relative p-3 font-medium md:font-semibold text-gray-700 rounded-full transition-all overflow-hidden cursor-pointer 
+                outline outline-0 outline-transparent outline-offset-2 active:outline-4 active:outline-gray-500/20
+                dark:text-gray-300;
+
+        &:not(.icon) {
+            @apply px-4;
+        }
+
+        &.icon {
+            @apply leading-6;
+        }
+
+        &.flat {
+            @apply bg-white dark:bg-gray-900;
+        }
+        
+        &:hover {
+            @apply bg-gray-200 dark:bg-gray-700;
+        }
+    }
+
+    .mouse {
+        @apply relative w-6 h-11 border-gray-300 border-2 rounded-3xl;
+        @apply dark:border-gray-700;
+
+        &::before {
+            @apply absolute content-[''] w-2 h-2 bg-gray-500 top-1 left-1/2 -translate-x-1/2 rounded-full opacity-100;
+
+            animation: wheel 1.5s infinite;
+        }
+    }
+    
+    @keyframes wheel { to {opacity: 0; top: calc(100% - 0.5rem - 4px);}}
+
+    .feather-mix-to-br {
+        @apply relative block;
+
+        > i {
+            @apply block;
+
+            &:first-child { clip-path: polygon(0 0, calc(100% - 2px) 0, -2px 100%); }
+            &:last-child { @apply absolute top-0 left-0; clip-path: polygon(calc(100% + 2px) 0, 100% 100%, 2px 100%); }
+        }
+    }
+}
+
+@layer utilities {
+
+    .shadow-primer-md { box-shadow: 0 3px 6px 0 rgb(var(--shadow-primer-color) / 15%); }
+    .shadow-primer-lg { box-shadow: 0 8px 24px 0 rgb(var(--shadow-primer-color) / 20%); }
+    .shadow-primer-xl { box-shadow: 0 12px 28px 0 rgb(var(--shadow-primer-color) / 30%); }
+
+    .grid-cols-1-1-3 {
+        grid-template-columns: max-content 1fr 3fr;
+    }
+
+    .reveal, .reveal-title, .reveal-date {
+        visibility: hidden;
+    }
+}
