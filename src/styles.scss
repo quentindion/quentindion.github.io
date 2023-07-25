@@ -97,17 +97,6 @@
     }
     
     @keyframes wheel { to {opacity: 0; top: calc(100% - 0.5rem - 4px);}}
-
-    .feather-mix-to-br {
-        @apply relative block;
-
-        > i {
-            @apply block;
-
-            &:first-child { clip-path: polygon(0 0, calc(100% - 2px) 0, -2px 100%); }
-            &:last-child { @apply absolute top-0 left-0; clip-path: polygon(calc(100% + 2px) 0, 100% 100%, 2px 100%); }
-        }
-    }
 }
 
 @layer utilities {

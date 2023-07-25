@@ -104,10 +104,10 @@ export class AppComponent implements AfterViewInit  {
         }
     ];
 
-    themes: {name: string, icon?: FeatherIconNames, icons?: FeatherIconNames[], action: Function}[] = [
+    themes: {name: string, icon?: FeatherIconNames, action: Function}[] = [
         {name: 'Clair', icon: 'sun', action: () => this.setTheme('light')},
         {name: 'Sombre', icon: 'moon', action: () => this.setTheme('dark')},
-        {name: 'Système', icons: ['sun', 'moon'], action: () => this.setTheme(undefined)}
+        {name: 'Système', icon: 'monitor', action: () => this.setTheme(undefined)}
     ];
 
     theme: Theme = localStorage.getItem('theme') as Theme;

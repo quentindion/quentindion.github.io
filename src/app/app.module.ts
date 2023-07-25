@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { IconDirective } from './icon.directive';
+import { FeatherIconDirective } from './icon.directive';
 import { DropdownTriggerForDirective } from './dropdown-trigger-for.directive';
 
 declare global {
@@ -30,7 +30,7 @@ Object.defineProperties(Number.prototype, {
 @NgModule({
   declarations: [
     AppComponent,
-    IconDirective,
+    FeatherIconDirective,
     DropdownTriggerForDirective
   ],
   imports: [

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --hmr --disable-host-check --host=0.0.0.0 --public-host=quentindion-solid-winner-v6997gqp9pxcpvpq-4200.preview.app.github.dev",
+    "start": "ng serve --disable-host-check --host=0.0.0.0 --public-host=quentindion-solid-winner-v6997gqp9pxcpvpq-4200.preview.app.github.dev",
     "build": "ng build --configuration production"
   },
   "private": true,

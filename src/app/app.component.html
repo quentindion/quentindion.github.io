@@ -3,10 +3,7 @@
         <li *ngFor="let item of themes" (click)="item.action()"
             class="button font-normal">
             <ng-container [ngSwitch]="item.icon">
-                <i *ngIf="item.icon" class="inline-block align-sub mr-2">{{item.icon}}</i>
-                <span *ngIf="item.icons" class="inline-block align-text-bottom mr-2 feather-mix-to-br">
-                    <i *ngFor="let icon of item.icons" class="text-gray-800 dark:text-gray-200">{{icon}}</i>
-                </span>
+                <i *ngIf="item.icon" class="inline-block align-sub mr-2" [featherIcon]="item.icon"></i>
                 {{item.name}}
             </ng-container>
         </li>
@@ -41,24 +38,21 @@
     <nav class="flex items-center justify-between p-4">
         <div class="flex flex-row gap-2">
             <a class="icon button rounded-full" (click)="mailMe()" role="navigation" aria-label="Mail">
-                <i>at-sign</i>
+                <i featherIcon="at-sign"></i>
             </a>
             <a class="icon button rounded-full" href="https://www.linkedin.com/in/quentindion" role="navigation" aria-label="LinkedIn">
-                <i>linkedin</i>
+                <i featherIcon="linkedin"></i>
             </a>
             <a class="icon button rounded-full" href="https://github.com/quentindion" role="navigation" aria-label="Github">
-                <i>github</i>
+                <i featherIcon="github"></i>
             </a>
             <a class="icon button rounded-full" href="https://www.youtube.com/@vs2kf" role="navigation" aria-label="Youtube">
-                <i>youtube</i>
+                <i featherIcon="youtube"></i>
             </a>
         </div>
         <div class="flex gap-2">
             <button [dropdownTriggerFor]="themeMenuTemplate" class="icon rounded-full" aria-label="Switch dark mode">
-                <span class="feather-mix-to-br">
-                    <i class="text-gray-800 dark:text-gray-200">sun</i>
-                    <i class="text-gray-800 dark:text-gray-200">moon</i>
-                </span>
+                <i class="text-gray-800 dark:text-gray-200" [featherIcon]="theme === 'dark' ? 'moon' : (theme === 'light' ? 'sun' : 'monitor')"></i>
             </button>
         </div>
     </nav>
@@ -82,8 +76,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let skill of skills" class="bg-gray-50 dark:bg-gray-900 px-6 py-8 rounded-xl shadow-primer-lg reveal">
             <div class="flex flex-row items-start gap-4">
-                <i class="w-20 min-w-[5rem] py-6 flex justify-center bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-xl mb-4 shadow-inner">
-                    {{skill.icon}}
+                <i class="w-20 min-w-[5rem] py-6 flex justify-center bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-xl mb-4 shadow-inner"
+                    [featherIcon]="skill.icon">
                 </i>
                 <div>
                     <h4 class="font-medium text-gray-700 dark:text-gray-300 text-lg mb-4">{{skill.category}}</h4>
