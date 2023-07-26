@@ -14,13 +14,13 @@
     <div class="w-full grid grid-cols-1-1-3 gap-6">
         <ng-container *ngFor="let item of items">
             <div>
-                <h3 class="text-gray-600 dark:text-gray-400 text-right text-2xl md:text-3xl reveal-date" *ngFor="let date of item.dates">{{date}}</h3>
+                <h3 class="text-gray-600 dark:text-gray-400 text-right text-2xl md:text-3xl reveal-fade" *ngFor="let date of item.dates">{{date}}</h3>
             </div>
-            <span class="w-full h-0.5 mt-5 border-b-4 border-gray-300 dark:border-gray-700 border-dotted reveal-date"></span>
+            <span class="w-full h-0.5 mt-5 border-b-4 border-gray-300 dark:border-gray-700 border-dotted reveal-fade"></span>
             <div>
-                <h3 class="text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 reveal">{{item.company}}</h3>
-                <h4 class="font-medium text-gray-700 dark:text-gray-300 text-lg mb-4 reveal">{{item.title}}</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base reveal">{{item.description}}</p>
+                <h3 class="text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 reveal-slide-right">{{item.company}}</h3>
+                <h4 class="font-medium text-gray-700 dark:text-gray-300 text-lg mb-4 reveal-slide-right">{{item.title}}</h4>
+                <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base reveal-slide-right">{{item.description}}</p>
             </div>
         </ng-container>
     </div>
@@ -37,17 +37,17 @@
     }">
     <nav class="flex items-center justify-between p-4">
         <div class="flex flex-row gap-2">
-            <a class="icon button rounded-full" (click)="mailMe()" role="navigation" aria-label="Mail">
-                <i featherIcon="at-sign"></i>
+            <a #mailButton class="icon button rounded-full p-2" (click)="mailMe()" role="navigation" aria-label="Mail">
+                <ng-lottie [options]="{path: 'assets/mail.json'}" [hoverInteractivityTrigger]="mailButton"></ng-lottie>
             </a>
-            <a class="icon button rounded-full" href="https://www.linkedin.com/in/quentindion" role="navigation" aria-label="LinkedIn">
-                <i featherIcon="linkedin"></i>
+            <a #linkedInButton class="icon button rounded-full p-2" href="https://www.linkedin.com/in/quentindion" role="navigation" aria-label="LinkedIn">
+                <ng-lottie [options]="{path: 'assets/linkedin.json'}" [hoverInteractivityTrigger]="linkedInButton"></ng-lottie>
             </a>
-            <a class="icon button rounded-full" href="https://github.com/quentindion" role="navigation" aria-label="Github">
-                <i featherIcon="github"></i>
+            <a #githubButton class="icon button rounded-full p-2" href="https://github.com/quentindion" role="navigation" aria-label="Github">
+                <ng-lottie [options]="{path: 'assets/github.json'}" [hoverInteractivityTrigger]="githubButton"></ng-lottie>
             </a>
-            <a class="icon button rounded-full" href="https://www.youtube.com/@vs2kf" role="navigation" aria-label="Youtube">
-                <i featherIcon="youtube"></i>
+            <a #YoutubeButton class="icon button rounded-full p-2" href="https://www.youtube.com/@vs2kf" role="navigation" aria-label="Youtube">
+                <ng-lottie [options]="{path: 'assets/youtube.json'}" [hoverInteractivityTrigger]="YoutubeButton"></ng-lottie>
             </a>
         </div>
         <div class="flex gap-2">
@@ -58,21 +58,24 @@
     </nav>
 </section>
 
-<section class="justify-center py-10 md:py-16 reveal-profile">
+<section class="justify-center py-10 md:py-16">
 
     <img src= "assets/profil.webp" alt="Image" class="h-[262px] w-[262px] mx-auto my-8 object-cover object-[center_60%] rounded-full reveal" loading="lazy" />
-    <h1 class="flex justify-center text-gray-600 dark:text-gray-400 text-lg md:text-2xl mb-8 reveal">Quentin Dion</h1>
+    <h1 class="flex justify-center text-gray-600 dark:text-gray-400 text-lg md:text-2xl mb-8 reveal-slide-up">Quentin Dion</h1>
 
-    <h2 class="flex justify-center md:font-light text-4xl md:text-7xl leading-none mb-8 text-transparent bg-clip-text
-        bg-gradient-to-br from-lime-300 to-gray-300 to-50% dark:from-lime-300/50 dark:to-gray-700 reveal">Lead Web Developer</h2>
-    <p class="flex justify-center text-gray-600 dark:text-gray-400 mb-10 md:mb-16 px-4 reveal">
+    <h2 class="flex justify-center md:font-light text-4xl md:text-7xl leading-none mb-8 text-transparent bg-clip-text reveal-slide-up
+        bg-gradient-to-br from-emerald-600 to-lime-500 dark:from-emerald-500 dark:to-lime-300">
+        Lead Web Developer
+    </h2>
+
+    <p class="flex justify-center text-gray-600 dark:text-gray-400 mb-10 md:mb-16 px-4 reveal-slide-up">
         Depuis {{seniority}}ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui
     </p>
-    <div class="mouse mx-auto reveal"></div>
+    <div class="mouse mx-auto reveal-slide-up"></div>
 </section>
 
-<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 reveal-cards">
-    <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 reveal-title">Compétences</h3>
+<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16">
+    <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 reveal-slide-right">Compétences</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div *ngFor="let skill of skills" class="bg-gray-50 dark:bg-gray-900 px-6 py-8 rounded-xl shadow-primer-lg reveal">
             <div class="flex flex-row items-start gap-4">
@@ -93,20 +96,24 @@
     </div>
 </section>
     
-<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 reveal-list">
+<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16">
     <div class="flex flex-col lg:flex-row justify-between gap-6">
         <div class="mb-10 lg:mb-0">
-            <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl reveal-title">Expériences</h3>
+            <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl reveal-slide-right">Expériences</h3>
         </div>
         <ng-container *ngTemplateOutlet="timelineTemplate; context: {$implicit: experiences}"></ng-container>
     </div>
 </section>
 
-<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 reveal-list">
+<section class="container max-w-screen-xl mx-auto px-4 py-10 md:py-16">
     <div class="flex flex-col lg:flex-row justify-between gap-6">
         <div class="mb-10 lg:mb-0">
-            <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl reveal-title">Formations</h3>
+            <h3 class="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl reveal-slide-right">Formations</h3>
         </div>
         <ng-container *ngTemplateOutlet="timelineTemplate; context: {$implicit: training}"></ng-container>
     </div>
 </section>
+
+<footer class="p-12 text-center">
+    Handcrafted with <a href="https://angular.io">Angular</a> & <a href="https://tailwindcss.com">Tailwind</a>.
+</footer>

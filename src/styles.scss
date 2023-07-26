@@ -34,54 +34,35 @@
     }
 
     a {
-        // @apply relative inline-block cursor-pointer bg-no-repeat bg-[length:200px_2px];
-        
-        // &::before {
-        //     @apply transition-transform duration-500 bg-white/25 bg-gradient-to-r from-cyan-500 to-blue-500;
-
-        //     content: '';
-        //     position: absolute;
-        //     width: 100%;
-        //     height: 2px;
-        //     top: calc(100% + 2px);
-        //     bottom: 0;
-        //     left: 0;
-        //     transform-origin: right;
-        //     transform: scaleX(0);
-        // }
-            
-        // &:hover::before {
-        //     transform-origin: left;
-        //     transform: scaleX(1);
-        // }
+        @apply underline underline-offset-2 hover:decoration-lime-500 transition-all;
     }
 
     // *::-webkit-scrollbar { @apply w-4; }
     // *::-webkit-scrollbar-track { @apply bg-gray-100 dark:bg-gray-800; }
     // *::-webkit-scrollbar-thumb { @apply bg-gray-500 rounded-xl border-4 border-solid border-gray-100 dark:border-gray-800; }
+
+    footer {
+        @apply shadow-inner text-sm bg-gray-200/50 dark:bg-gray-700/25 text-gray-400;
+    }
 }
 
 @layer components {
 
     button, .button {
         @apply relative p-3 font-medium md:font-semibold text-gray-700 rounded-full transition-all overflow-hidden cursor-pointer 
-                outline outline-0 outline-transparent outline-offset-2 active:outline-4 active:outline-gray-500/20
-                dark:text-gray-300;
+                hover:bg-gray-200 active:bg-gray-300
+                dark:text-gray-300 dark:hover:bg-gray-700 dark:active:bg-gray-700/50;
 
         &:not(.icon) {
             @apply px-4;
         }
 
         &.icon {
-            @apply leading-6;
+            @apply w-12 h-12;
         }
 
         &.flat {
             @apply bg-white dark:bg-gray-900;
-        }
-        
-        &:hover {
-            @apply bg-gray-200 dark:bg-gray-700;
         }
     }
 
@@ -97,6 +78,8 @@
     }
     
     @keyframes wheel { to {opacity: 0; top: calc(100% - 0.5rem - 4px);}}
+
+    ng-lottie svg path { stroke: currentColor; }
 }
 
 @layer utilities {
@@ -109,7 +92,10 @@
         grid-template-columns: max-content 1fr 3fr;
     }
 
-    .reveal, .reveal-title, .reveal-date {
+    .reveal,
+    .reveal-fade,
+    .reveal-slide-up,
+    .reveal-slide-right {
         visibility: hidden;
     }
 }

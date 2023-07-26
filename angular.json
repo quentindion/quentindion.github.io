@@ -62,7 +62,8 @@
             ],
             "allowedCommonJsDependencies": [
                 "tailwindcss/resolveConfig",
-                "feather-icons"
+                "feather-icons",
+                "lottie-web"
             ]
           },
           "configurations": {

@@ -4,11 +4,26 @@ import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '../../tailwind.config';
 import { Config, KeyValuePair } from 'tailwindcss/types/config';
 import { Observable, fromEvent, map, startWith } from 'rxjs';
-import Scrollreveal from 'scrollreveal';
 import { panelAnimation } from './dropdown-trigger-for.directive';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe-decorator';
+import { ScrollRevealService } from './scroll-reveal.service';
 
 export type Theme = undefined | 'light' | 'dark';
 export type ThemableWindow = Window & typeof globalThis & {updateTheme: Function};
+
+export type Skill = {
+    category: string,
+    icon: FeatherIconNames,
+    items: string[],
+    description: string
+}
+
+export type Experience = {
+    title?: string,
+    company: string,
+    dates: string[],
+    description: string
+}
 
 @Component({
     selector: 'app-root',
@@ -35,7 +50,7 @@ export class AppComponent implements AfterViewInit  {
 
     seniority: number = (new Date).getFullYear() - 2013;
 
-    skills: {category: string, icon: FeatherIconNames, items: string[], description: string}[] = [
+    skills: Skill[] = [
         {
             category: 'BI',
             icon: 'bar-chart-2',
@@ -68,7 +83,7 @@ export class AppComponent implements AfterViewInit  {
         }
     ];
 
-    experiences: {title: string, company: string, dates: string[], description: string}[] = [
+    experiences: Experience[] = [
         {
             title: 'Lead développeur web',
             company: 'Oxance',
@@ -92,7 +107,7 @@ export class AppComponent implements AfterViewInit  {
         }
     ];
 
-    training: {description: string, company: string, dates: string[]}[] = [
+    training: Experience[] = [
         {
             company: 'Licence Pro SIL',
             description: 'Métiers de l\'internet et des applications multimédia',
@@ -104,7 +119,7 @@ export class AppComponent implements AfterViewInit  {
         }
     ];
 
-    themes: {name: string, icon?: FeatherIconNames, action: Function}[] = [
+    themes: {name: string, icon: FeatherIconNames, action: () => void}[] = [
         {name: 'Clair', icon: 'sun', action: () => this.setTheme('light')},
         {name: 'Sombre', icon: 'moon', action: () => this.setTheme('dark')},
         {name: 'Système', icon: 'monitor', action: () => this.setTheme(undefined)}
@@ -114,7 +129,7 @@ export class AppComponent implements AfterViewInit  {
 
     isMd: boolean = false;
 
-    constructor() { 
+    constructor(private scrollReveal: ScrollRevealService) { 
         
         this.onResize();
 
@@ -123,15 +138,7 @@ export class AppComponent implements AfterViewInit  {
     }
 
     ngAfterViewInit(): void {
-
-        if(!matchMedia('print').matches && !matchMedia('(prefers-reduced-motion)').matches) {
-            Scrollreveal().reveal('.reveal-profile .reveal', {interval: 100, distance: '80px'});
-            Scrollreveal().reveal('.reveal-cards .reveal-title', {interval: 100, distance: '80px', origin: 'right'});
-            Scrollreveal().reveal('.reveal-cards .reveal', {interval: 100, scale: .8, opacity: 0});
-            Scrollreveal().reveal('.reveal-list .reveal-title', {interval: 100, distance: '80px', origin: 'right'});
-            Scrollreveal().reveal('.reveal-list .reveal-date', {interval: 100, opacity: 0});
-            Scrollreveal().reveal('.reveal-list .reveal', {interval: 100, distance: '80px', origin: 'right'});
-        }
+        this.scrollReveal.sync();
     }
 
     mailMe () {
@@ -148,6 +155,7 @@ export class AppComponent implements AfterViewInit  {
         (window as ThemableWindow).updateTheme();
     }
 
+    @AutoUnsubscribe()
     onMedia (query: string): Observable<Boolean> {
 
         const mediaQuery = matchMedia(query);
