@@ -40,10 +40,6 @@
     // *::-webkit-scrollbar { @apply w-4; }
     // *::-webkit-scrollbar-track { @apply bg-gray-100 dark:bg-gray-800; }
     // *::-webkit-scrollbar-thumb { @apply bg-gray-500 rounded-xl border-4 border-solid border-gray-100 dark:border-gray-800; }
-
-    footer {
-        @apply shadow-inner text-sm bg-gray-200/50 dark:bg-gray-700/25 text-gray-400;
-    }
 }
 
 @layer components {
