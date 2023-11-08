@@ -1,41 +1,37 @@
 {
-  "name": "me",
-  "version": "1.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve --disable-host-check --host=0.0.0.0 --public-host=quentindion-solid-winner-v6997gqp9pxcpvpq-4200.preview.app.github.dev",
-    "build": "ng build --configuration production"
-  },
+  "name": "quentindion.github.io",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@angular/animations": "^16.0.4",
-    "@angular/cdk": "^16.1.2",
-    "@angular/common": "^16.0.4",
-    "@angular/compiler": "^16.0.4",
-    "@angular/core": "^16.0.4",
-    "@angular/forms": "^16.1.2",
-    "@angular/platform-browser": "^16.0.4",
-    "@angular/platform-browser-dynamic": "^16.1.2",
-    "feather-icons": "^4.29.0",
-    "lottie-web": "^5.12.2",
-    "ngx-auto-unsubscribe-decorator": "^1.1.0",
-    "ngx-lottie": "^10.0.0",
-    "rxjs": "~7.8.1",
-    "scrollreveal": "^4.0.9",
-    "tslib": "^2.6.0",
-    "zone.js": "^0.13.1"
+    "@headlessui/react": "^1.7.17",
+    "framer-motion": "^10.16.4",
+    "lottie-react": "^2.4.0",
+    "lucide-react": "^0.292.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-responsive": "^9.0.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.1.1",
-    "@angular/cli": "^16.1.1",
-    "@angular/compiler-cli": "^16.1.2",
-    "@tailwindcss/typography": "^0.5.9",
-    "@types/feather-icons": "^4.29.1",
-    "@types/node": "^20.3.2",
-    "@types/scrollreveal": "^0.0.8",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
-    "typescript": "~4.9.5"
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "@vitejs/plugin-react-swc": "^3.4.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "postcss": "^8.4.31",
+    "sass": "^1.69.5",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
   }
 }

@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    html {
+        @apply font-sans overflow-x-hidden;
+    }
+
+    body {
+        @apply min-h-screen overflow-x-clip text-gray-800 bg-gray-100 dark:text-gray-200 dark:bg-gray-800;
+        
+        &::before {
+            @apply content-[''] w-screen h-screen absolute top-0 left-0 bg-gradient-to-br from-blue-500 via-lime-500 via-25% to-50% opacity-25 -z-[1];
+            mask: url(assets/path.svg);
+        }
+    }
+
+    h1, h2, h3, h4, h5 {
+        @apply inline-block;
+    }
+
+    a {
+        @apply underline underline-offset-2 hover:decoration-lime-500 transition-all;
+    }
+}
+
+@layer utilities {
+
+    .lottie-icon svg path {
+        @apply stroke-current;
+    }
+
+    button, .button {
+        @apply relative inline-block no-underline cursor-pointer rounded-xl
+                after:content-[''] after:absolute after:w-full after:h-full after:top-0 after:left-0 after:rounded-xl after:-z-[1]
+                after:scale-95 after:bg-transparent after:transition-all
+                hover:after:scale-100 hover:after:bg-gray-200
+                active:after:scale-95
+                dark:hover:after:bg-gray-800;
+
+        > .lucide { @apply inline-block; }
+        > .lottie-icon { @apply -m-1; }
+
+        &:not(.button-icon) {
+            @apply px-4 py-3;
+
+            > .lucide { @apply first:mr-1; }
+        }
+
+        &-icon {
+            @apply button h-12 w-12 p-3
+                    after:rounded-full;
+
+            > .lucide { @apply align-baseline; }
+        }
+    }
+
+    .motion-fade,
+    .motion-fade-up,
+    .motion-fade-left,
+    .motion-fade-right,
+    .motion-fade-scale { @apply invisible; }
+
+    .grid-cols-1-1-3 {
+        grid-template-columns: max-content 1fr 3fr;
+    }
+}

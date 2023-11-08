@@ -1,18 +1,19 @@
 import type { Config } from 'tailwindcss'
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 export default {
-    theme: {
-        extend: {
-            fontFamily: {
-                poppins: "Poppins, 'monospace', sans-serif"
-            }
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+        fontFamily: {
+            sans: ['"Noto Sans"', ...fontFamily.sans],
         }
     },
-    content: [
-        "./src/**/*.{html,ts}"
-    ],
-    darkMode: 'class',
-    plugins: [
-        require("@tailwindcss/typography")
-    ],
+  },
+  darkMode: 'class',
+  plugins: [],
 } satisfies Config
+
