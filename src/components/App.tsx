@@ -185,21 +185,21 @@ export default function App () {
             }}>
             <nav className="relative flex items-center justify-between p-2">
                 <div className="flex flex-row gap-2">
-                    <a className="button-icon dark:hover:after:bg-gray-700" onClick={mailMe} role="navigation" aria-label="Mail">
+                    <a className="button-icon dark:hover:after:bg-gray-700" onClick={mailMe} role="button" aria-label="Mail">
                         <LottieIcon animationData={mailIconAnimation} />
                     </a>
-                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://www.linkedin.com/in/quentindion" role="navigation" aria-label="LinkedIn">
+                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
                         <LottieIcon animationData={linkedinIconAnimation} />
                     </a>
-                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://github.com/quentindion" role="navigation" aria-label="Github">
+                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://github.com/quentindion" role="button" aria-label="Github">
                         <LottieIcon animationData={githubIconAnimation} />
                     </a>
-                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://www.youtube.com/@vs2kf" role="navigation" aria-label="Youtube">
+                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
                         <LottieIcon animationData={youtubeIconAnimation} />
                     </a>
                 </div>
                 <Menu as="div">
-                    <Menu.Button className="button-icon hover:after:bg-gray-200 dark:hover:after:bg-gray-700">
+                    <Menu.Button className="button-icon hover:after:bg-gray-200 dark:hover:after:bg-gray-700" role="button" aria-label="Theme">
                         <Palette />
                     </Menu.Button>
                     <AnimatePresence>
@@ -222,7 +222,7 @@ export default function App () {
             </nav>
         </motion.section>
         <section className="justify-center py-10 md:py-16">
-            <img src={profilImg} alt="Image" loading="lazy"
+            <img src={profilImg} alt="Image"
                 className="h-[262px] w-[262px] mx-auto my-8 object-cover object-[center_60%] rounded-full motion-fade-up" />
             
             <h1 className="flex justify-center text-gray-600 dark:text-gray-400 text-lg md:text-2xl mb-8 motion-fade-up">Quentin Dion</h1>

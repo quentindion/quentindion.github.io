@@ -11,16 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         // It's best to inline this in `head` to avoid FOUC (flash of unstyled content)
-        window.applyTheme = function () {
+        window.applyTheme = () => {
             if((window.matchMedia('screen').matches && localStorage.getItem('theme') === 'dark') || 
                 (!('theme' in localStorage) && window.matchMedia('screen and (prefers-color-scheme: dark)').matches))
                 document.documentElement.classList.add('dark');
             else
                 document.documentElement.classList.remove('dark');
-        };
-        applyTheme();
+        }; applyTheme();
       </script>
-    <script type="module" crossorigin src="/assets/index-bbd511e1.js"></script>
+    <script type="module" crossorigin src="/assets/index-906efc5b.js"></script>
     <link rel="stylesheet" href="/assets/index-1a5a01b5.css">
   </head>
   <body>
