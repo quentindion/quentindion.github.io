@@ -140,8 +140,8 @@ export default function App () {
     const navBgOpacity = useTransform(navScrollYProgress, [0, 1], [0, 0.75]);
     const navBorderRadius = useTransform(navScrollYProgress, [0, 1], [40, 0]);
     const navShadowOpacity = useTransform(navScrollYProgress, [0, 1], [
-        '0 0px 0px -5px var(--tw-shadow-color), 0 0px 0px -5px var(--tw-shadow-color)',
-        '0 20px 25px -5px var(--tw-shadow-color), 0 20px 25px -5px var(--tw-shadow-color)'
+        '0 0px 0px -5px var(--tw-shadow-color), 0 0px 0px -6px var(--tw-shadow-color)',
+        '0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color)'
     ]);
 
     const menuAnimations = {
@@ -153,7 +153,6 @@ export default function App () {
             scale: 1,
             opacity: 1,
             transition: {
-                // type: 'spring',
                 delayChildren: 0.15,
                 staggerChildren: 0.05,
             }
@@ -176,7 +175,7 @@ export default function App () {
     return <>
         <section className="h-20"></section>
         <motion.section className="mx-auto sticky top-0 z-10 max-w-screen-xl container backdrop-blur-md min-w-[75%] md:min-w-[50%]
-            bg-gray-100 shadow-xl shadow-gray-500/25 dark:bg-gray-800 dark:shadow-black/25 motion-fade-up"
+            bg-neutral-100 shadow-xl shadow-neutral-500/25 dark:bg-neutral-900 dark:shadow-black/25 motion-fade-up"
             style={{
                 maxWidth: navMaxWidth,
                 borderRadius: navBorderRadius,
@@ -185,27 +184,27 @@ export default function App () {
             }}>
             <nav className="relative flex items-center justify-between p-2">
                 <div className="flex flex-row gap-2">
-                    <a className="button-icon dark:hover:after:bg-gray-700" onClick={mailMe} role="button" aria-label="Mail">
+                    <a className="button-icon" onClick={mailMe} role="button" aria-label="Mail">
                         <LottieIcon animationData={mailIconAnimation} />
                     </a>
-                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
+                    <a className="button-icon" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
                         <LottieIcon animationData={linkedinIconAnimation} />
                     </a>
-                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://github.com/quentindion" role="button" aria-label="Github">
+                    <a className="button-icon" href="https://github.com/quentindion" role="button" aria-label="Github">
                         <LottieIcon animationData={githubIconAnimation} />
                     </a>
-                    <a className="button-icon dark:hover:after:bg-gray-700" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
+                    <a className="button-icon" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
                         <LottieIcon animationData={youtubeIconAnimation} />
                     </a>
                 </div>
                 <Menu as="div">
-                    <Menu.Button className="button-icon hover:after:bg-gray-200 dark:hover:after:bg-gray-700" role="button" aria-label="Theme">
+                    <Menu.Button className="button-icon" role="button" aria-label="Theme">
                         <Palette />
                     </Menu.Button>
                     <AnimatePresence>
                         <Menu.Items className="absolute top-2 right-2 w-full sm:w-auto">
                             <motion.div key="theme-menu" 
-                                className="flex flex-col outline-none p-2 shadow-xl rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-900 origin-top-right"
+                                className="flex flex-col outline-none p-2 shadow-xl rounded-xl overflow-hidden bg-neutral-50 dark:bg-neutral-950 origin-top-right"
                                 initial="hidden" animate="visible" exit="exit" variants={menuAnimations}>
                                 {themes.map(({name, icon, action}, i) => {
                                     const LucideIcon = icon;
@@ -221,66 +220,67 @@ export default function App () {
                 </Menu>
             </nav>
         </motion.section>
-        <section className="justify-center py-10 md:py-16">
+        <section className="container mx-auto px-4 justify-center py-10 md:py-16">
             <img src={profilImg} alt="Image"
                 className="h-[262px] w-[262px] mx-auto my-8 object-cover object-[center_60%] rounded-full motion-fade-up" />
             
-            <h1 className="flex justify-center text-gray-600 dark:text-gray-400 text-lg md:text-2xl mb-8 motion-fade-up">Quentin Dion</h1>
+            <h1 className="flex justify-center title mb-8 motion-fade-up">Quentin Dion</h1>
 
-            <h2 className="flex justify-center md:font-light text-4xl md:text-7xl leading-none mb-8 text-transparent bg-clip-text
-                bg-gradient-to-br from-emerald-600 to-lime-500 dark:from-emerald-500 dark:to-lime-300 motion-fade-up">
+            <h2 className="flex justify-center text-4xl md:text-6xl leading-none mb-8 text-transparent bg-clip-text bg-gradient-main motion-fade-up">
                 Lead Web Developer
             </h2>
 
-            <p className="flex justify-center text-gray-600 dark:text-gray-400 mb-10 md:mb-16 px-4 motion-fade-up">
+            <p className="flex justify-center mb-10 md:mb-16 motion-fade-up">
                 Depuis {seniority}ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui
             </p>
 
-            <Lottie animationData={scrollDownIconAnimation} className="lottie lottie-icon mx-auto w-10 text-gray-500 motion-fade-up" />
+            <Lottie animationData={scrollDownIconAnimation} className="lottie lottie-icon mx-auto w-10 motion-fade-up" />
         </section>
 
-        <section className="container max-w-screen-xl mx-auto px-4 py-10 md:py-16">
-            <h3 className="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl mb-5 motion-fade-left">Compétences</h3>
+        <section className="container mx-auto px-4 max-w-screen-xl py-10 md:py-16">
+            <h3 className="title mb-5 motion-fade-left">Compétences</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {skills.map(({category, items, description, icon}, i) => {
 
                     const LucideIcon = icon;
                     
-                    return <div key={'skill-' + i} className="bg-gray-50 dark:bg-gray-900 px-6 py-8 rounded-xl shadow-primer-lg motion-fade-scale">
-                        <div className="flex flex-row items-start gap-4">
-                            <div className="w-20 min-w-[5rem] py-6 flex justify-center bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-xl mb-4 shadow-inner">
-                                <LucideIcon />
-                            </div>
-                            <div>
-                                <h4 className="font-medium text-gray-700 dark:text-gray-300 text-lg mb-4">{category}</h4>
-                                <div className="text-gray-600 dark:text-gray-400 text-md flex flex-row flex-wrap gap-1">
-                                    {items.map((item, j) =>
-                                        <span key={'skill-item-' + j} className="bg-gray-100 dark:bg-gray-800 text-xs text-center font-medium px-2 py-1 rounded-xl">
-                                            {item}
-                                        </span>
-                                    )}
+                    return <div key={'skill-' + i} className="p-[1px] rounded-xl shadow-primer-lg bg-gradient-main motion-fade-scale">
+                        <div className="px-6 py-8 h-full bg-white/90 dark:bg-neutral-900/90 rounded-[11px]">
+                            <div className="flex flex-row items-start gap-4">
+                                <div className="w-20 min-w-[5rem] py-6 flex justify-center bg-white dark:bg-neutral-900 rounded-xl mb-4">
+                                    <LucideIcon />
+                                </div>
+                                <div>
+                                    <h4 className="text-lg font-medium mb-4">{category}</h4>
+                                    <div className="text-md flex flex-row flex-wrap gap-1">
+                                        {items.map((item, j) =>
+                                            <span key={'skill-item-' + j} className="text-xs font-bold bg-white dark:bg-neutral-900 text-center px-2 py-1 rounded-xl">
+                                                {item}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
+                            <p className="text-md">{description}</p>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400 text-md">{description}</p>
                     </div>
                 })}
             </div>
         </section>
             
-        <section className="container max-w-screen-xl mx-auto px-4 py-10 md:py-16">
+        <section className="container mx-auto px-4 max-w-screen-xl py-10 md:py-16">
             <div className="flex flex-col lg:flex-row justify-between gap-6">
                 <div className="mb-10 lg:mb-0">
-                    <h3 className="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl motion-fade-left">Expériences</h3>
+                    <h3 className="title motion-fade-left">Expériences</h3>
                 </div>
                 <Timeline experiences={experiences} />
             </div>
         </section>
 
-        <section className="container max-w-screen-xl mx-auto px-4 py-10 md:py-16 mb-12">
+        <section className="container mx-auto px-4 max-w-screen-xl py-10 md:py-16 mb-12">
             <div className="flex flex-col lg:flex-row justify-between gap-6">
                 <div className="mb-10 lg:mb-0">
-                    <h3 className="font-light text-gray-700 dark:text-gray-300 text-3xl md:text-4xl motion-fade-left">Formations</h3>
+                    <h3 className="title motion-fade-left">Formations</h3>
                 </div>
                 <Timeline experiences={training} />
             </div>
