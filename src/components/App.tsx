@@ -15,7 +15,7 @@ import LottieIcon from './LottieIcon.js';
 import profilImg from '../assets/profil.webp';
 import { Config } from 'tailwindcss';
 import { useMediaQuery } from 'react-responsive';
-import useInView from '../hooks/inView.js';
+import useAnimateInView from '../hooks/animateInView.js';
 
 export type Theme = null | 'light' | 'dark';
 
@@ -166,11 +166,11 @@ export default function App () {
         exit: {opacity: 0}
     };
 
-    useInView('.motion-fade', {initial: {opacity: 0}, animate: {opacity: 1}});
-    useInView('.motion-fade-up', {initial: {opacity: 0, y: 75}, animate: {opacity: 1, y: 0}});
-    useInView('.motion-fade-left', {initial: {opacity: 0, x: -75}, animate: {opacity: 1, x: 0}});
-    useInView('.motion-fade-right', {initial: {opacity: 0, x: 75}, animate: {opacity: 1, x: 0}});
-    useInView('.motion-fade-scale', {initial: {opacity: 0, scale: 0}, animate: {opacity: 1, scale: 1}});
+    useAnimateInView('.motion-fade', {initial: {opacity: 0}, animate: {opacity: 1}});
+    useAnimateInView('.motion-fade-up', {initial: {opacity: 0, y: 75}, animate: {opacity: 1, y: 0}});
+    useAnimateInView('.motion-fade-left', {initial: {opacity: 0, x: -75}, animate: {opacity: 1, x: 0}});
+    useAnimateInView('.motion-fade-right', {initial: {opacity: 0, x: 75}, animate: {opacity: 1, x: 0}});
+    useAnimateInView('.motion-fade-scale', {initial: {opacity: 0, scale: 0}, animate: {opacity: 1, scale: 1}});
 
     return <>
         <section className="h-20"></section>

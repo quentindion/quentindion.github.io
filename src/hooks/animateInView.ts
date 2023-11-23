@@ -1,7 +1,7 @@
 import { DOMKeyframesDefinition, animate } from 'framer-motion';
 import {useEffect} from 'react';
 
-export default function useInView(
+export default function useAnimateInView(
     selector: string,
     variants: {
         initial?: DOMKeyframesDefinition,
