@@ -9,7 +9,7 @@
     }
 
     body {
-        @apply min-h-screen overflow-x-clip text-neutral-700 bg-neutral-100
+        @apply min-h-screen overflow-x-clip text-neutral-700 bg-neutral-100 transition-colors
             dark:bg-neutral-900 dark:text-neutral-400;
         
         &::before {

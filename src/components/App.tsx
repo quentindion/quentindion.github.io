@@ -13,7 +13,6 @@ import youtubeIconAnimation from '../assets/youtube.json';
 import scrollDownIconAnimation from '../assets/scrollDown.json';
 import LottieIcon from './LottieIcon.js';
 import profilImg from '../assets/profil.webp';
-import { Config } from 'tailwindcss';
 import { useMediaQuery } from 'react-responsive';
 import useAnimateInView from '../hooks/animateInView.js';
 
@@ -110,7 +109,7 @@ export default function App () {
         location.href = 'mailto:' + ['contact@quentindion', 'me'].join('.');
     }
 
-    const {theme: {screens}} = resolveConfig(tailwindConfig) as {theme: Partial<Config>};
+    const {theme: {screens}} = resolveConfig(tailwindConfig);
 
     const isMd = useMediaQuery({query: `(min-width: ${screens.md})`});
 
@@ -120,7 +119,7 @@ export default function App () {
         {name: 'Système', icon: SunMoon, action: () => updateTheme(null)}
     ];
 
-    const [_theme, setTheme] = useState<Theme>(localStorage.getItem('theme') as Theme);
+    const [, setTheme] = useState<Theme>(localStorage.getItem('theme') as Theme);
 
     const updateTheme = (theme: Theme) => {
 
@@ -137,12 +136,8 @@ export default function App () {
     const navScrollYProgress = useTransform(scrollY, [80, 400], [0, 1]);
 
     const navMaxWidth = useTransform(navScrollYProgress, [0, 1], [`${isMd ? 50 : 75}%`, '100%']);
-    const navBgOpacity = useTransform(navScrollYProgress, [0, 1], [0, 0.75]);
+    const navBgOpacity = useTransform(navScrollYProgress, [0, 1], [0, 0.5]);
     const navBorderRadius = useTransform(navScrollYProgress, [0, 1], [40, 0]);
-    const navShadowOpacity = useTransform(navScrollYProgress, [0, 1], [
-        '0 0px 0px -5px var(--tw-shadow-color), 0 0px 0px -6px var(--tw-shadow-color)',
-        '0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color)'
-    ]);
 
     const menuAnimations = {
         hidden: {
@@ -175,11 +170,10 @@ export default function App () {
     return <>
         <section className="h-20"></section>
         <motion.section className="mx-auto sticky top-0 z-10 max-w-screen-xl container backdrop-blur-md min-w-[75%] md:min-w-[50%]
-            bg-neutral-100 shadow-xl shadow-neutral-500/25 dark:bg-neutral-900 dark:shadow-black/25 motion-fade-up"
+            bg-neutral-100 dark:bg-neutral-900 motion-fade-up"
             style={{
                 maxWidth: navMaxWidth,
                 borderRadius: navBorderRadius,
-                '--tw-shadow-colored': navShadowOpacity,
                 '--tw-bg-opacity': navBgOpacity
             }}>
             <nav className="relative flex items-center justify-between p-2">

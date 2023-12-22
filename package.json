@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^10.16.16",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.292.0",
     "react": "^18.2.0",
@@ -19,19 +19,19 @@
     "react-responsive": "^9.0.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
-    "@vitejs/plugin-react-swc": "^3.4.1",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.53.0",
+    "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "postcss": "^8.4.31",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.32",
     "sass": "^1.69.5",
-    "tailwindcss": "^3.3.5",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0"
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vite": "^4.5.1"
   }
 }
