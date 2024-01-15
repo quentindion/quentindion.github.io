@@ -14,7 +14,7 @@ export default function useAnimateInView(
         const elements = Array.from(document.body.querySelectorAll(selector) as NodeListOf<HTMLElement>)
                               .filter(e => !e.classList.contains('motion-in-view-animated'));
 
-        if(variants.initial) {
+        if(variants.initial && elements.length > 0) {
             animate(Array.from(elements).map(e => [e, variants.initial as DOMKeyframesDefinition, {at: 0, duration: 0}]));
             elements.forEach(e => e.style.visibility = 'visible');
         }
@@ -28,12 +28,12 @@ export default function useAnimateInView(
                 animate(visibles.map(e => [e, variants.animate as DOMKeyframesDefinition, {type: 'spring', duration: 0.75, at: '-0.7'}]));
             }
         
-        }, {threshold: 0.3});
+        });
 
         elements.forEach(e => observer.observe(e));
 
         return () => {
             elements.forEach(e => observer.unobserve(e));
         }
-    }, [selector, variants.animate, variants.initial]);
+    }, [selector, variants]);
 }

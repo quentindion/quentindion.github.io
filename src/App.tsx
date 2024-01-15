@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { LucideIcon, BarChart2, Layout, Server, Database, Globe, Palette, Sun, Moon, SunMoon } from 'lucide-react';
-import { Menu } from '@headlessui/react';
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, Variants, motion, useScroll, useTransform } from "framer-motion";
 import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '../../tailwind.config.js';
+import tailwindConfig from '../tailwind.config.js';
 import Lottie from 'lottie-react';
-import Timeline from './Timeline.js';
-import githubIconAnimation from '../assets/github.json';
-import linkedinIconAnimation from '../assets/linkedin.json';
-import mailIconAnimation from '../assets/mail.json';
-import youtubeIconAnimation from '../assets/youtube.json';
-import scrollDownIconAnimation from '../assets/scrollDown.json';
-import LottieIcon from './LottieIcon.js';
-import profilImg from '../assets/profil.webp';
+import Timeline from './components/Timeline.js';
+import githubIconAnimation from './assets/github.json';
+import linkedinIconAnimation from './assets/linkedin.json';
+import mailIconAnimation from './assets/mail.json';
+import youtubeIconAnimation from './assets/youtube.json';
+import scrollDownIconAnimation from './assets/scrollDown.json';
+import LottieIcon from './components/LottieIcon.js';
+import profilImg from './assets/profil.webp';
 import { useMediaQuery } from 'react-responsive';
-import useAnimateInView from '../hooks/animateInView.js';
+import useAnimateInView from './hooks/useAnimateInView.js';
+import { Menu } from '@headlessui/react';
 
 export type Theme = null | 'light' | 'dark';
 
@@ -46,7 +46,7 @@ export default function App () {
         {
             category: 'Interface Web',
             icon: Layout,
-            items: ['HTML', 'CSS', 'JS', 'React', 'Angular', 'Tailwind'],
+            items: ['React', 'Angular', 'Tailwind'],
             description: 'Développement de PWA et d\'interfaces utilisateur pour de la gestion métier (planifications, gestion de ressources internes).'
         },
         {
@@ -139,36 +139,36 @@ export default function App () {
     const navBgOpacity = useTransform(navScrollYProgress, [0, 1], [0, 0.5]);
     const navBorderRadius = useTransform(navScrollYProgress, [0, 1], [40, 0]);
 
-    const menuAnimations = {
-        hidden: {
+    const menuAnimations: Variants = {
+        initial: {
             scale: 0,
             opacity: 0
         },
-        visible: {
+        animate: {
             scale: 1,
             opacity: 1,
             transition: {
-                delayChildren: 0.15,
-                staggerChildren: 0.05,
+                delayChildren: 0.10,
+                staggerChildren: 0.05
             }
         },
         exit: {opacity: 0}
     };
 
-    const menuItemAnimation = {
-        hidden: {y: 25, opacity: 0},
-        visible: {y: 0, opacity: 1},
+    const menuItemAnimation: Variants = {
+        initial: {y: -30, opacity: 0},
+        animate: {y: 0, opacity: 1},
         exit: {opacity: 0}
     };
 
     useAnimateInView('.motion-fade', {initial: {opacity: 0}, animate: {opacity: 1}});
-    useAnimateInView('.motion-fade-up', {initial: {opacity: 0, y: 75}, animate: {opacity: 1, y: 0}});
-    useAnimateInView('.motion-fade-left', {initial: {opacity: 0, x: -75}, animate: {opacity: 1, x: 0}});
-    useAnimateInView('.motion-fade-right', {initial: {opacity: 0, x: 75}, animate: {opacity: 1, x: 0}});
+    useAnimateInView('.motion-fade-up', {initial: {opacity: 0, y: 100}, animate: {opacity: 1, y: 0}});
+    useAnimateInView('.motion-fade-left', {initial: {opacity: 0, x: -100}, animate: {opacity: 1, x: 0}});
+    useAnimateInView('.motion-fade-right', {initial: {opacity: 0, x: 100}, animate: {opacity: 1, x: 0}});
     useAnimateInView('.motion-fade-scale', {initial: {opacity: 0, scale: 0}, animate: {opacity: 1, scale: 1}});
 
     return <>
-        <section className="h-20"></section>
+        <section className="h-12"></section>
         <motion.section className="mx-auto sticky top-0 z-10 max-w-screen-xl container backdrop-blur-md min-w-[75%] md:min-w-[50%]
             bg-neutral-100 dark:bg-neutral-900 motion-fade-up"
             style={{
@@ -176,7 +176,7 @@ export default function App () {
                 borderRadius: navBorderRadius,
                 '--tw-bg-opacity': navBgOpacity
             }}>
-            <nav className="relative flex items-center justify-between p-2">
+            <nav className="flex items-center justify-between p-2">
                 <div className="flex flex-row gap-2">
                     <a className="button-icon" onClick={mailMe} role="button" aria-label="Mail">
                         <LottieIcon animationData={mailIconAnimation} />
@@ -191,40 +191,37 @@ export default function App () {
                         <LottieIcon animationData={youtubeIconAnimation} />
                     </a>
                 </div>
-                <Menu as="div">
+                <Menu>{({ open }) => <>
                     <Menu.Button className="button-icon" role="button" aria-label="Theme">
                         <Palette />
                     </Menu.Button>
                     <AnimatePresence>
-                        <Menu.Items className="absolute top-2 right-2 w-full sm:w-auto">
-                            <motion.div key="theme-menu" 
-                                className="flex flex-col outline-none p-2 shadow-xl rounded-xl overflow-hidden bg-neutral-50 dark:bg-neutral-950 origin-top-right"
-                                initial="hidden" animate="visible" exit="exit" variants={menuAnimations}>
-                                {themes.map(({name, icon, action}, i) => {
-                                    const LucideIcon = icon;
-                                    return <Menu.Item key={'theme-menu-item' + i}>
-                                        <motion.button onClick={action} className="text-left z-[1]" variants={menuItemAnimation}>
-                                            <LucideIcon /> {name}
-                                        </motion.button>
-                                    </Menu.Item>;
-                                })}
-                            </motion.div>
-                        </Menu.Items>
+                        {open && <motion.div key="theme-menu" initial="initial" animate="animate" exit="exit" variants={menuAnimations}
+                            className="menu">
+                            {themes.map(({name, icon, action}, i) => {
+                                const LucideIcon = icon;
+                                return <Menu.Item as={motion.div} key={'theme-menu-item' + i} variants={menuItemAnimation}>
+                                    <button onClick={action} className="text-left w-full">
+                                        <LucideIcon /> {name}
+                                    </button>
+                                </Menu.Item>;
+                            })}
+                        </motion.div>}
                     </AnimatePresence>
-                </Menu>
+                </>}</Menu>
             </nav>
         </motion.section>
-        <section className="container mx-auto px-4 justify-center py-10 md:py-16">
-            <img src={profilImg} alt="Image"
-                className="h-[262px] w-[262px] mx-auto my-8 object-cover object-[center_60%] rounded-full motion-fade-up" />
+        <section className="relative container mx-auto px-4 justify-center py-10 md:py-16">
             
+            <img src={profilImg} alt="Image" className="relative h-[262px] w-[262px] mx-auto my-8 object-cover object-[center_60%] rounded-full motion-fade-up" />
+
             <h1 className="flex justify-center title mb-8 motion-fade-up">Quentin Dion</h1>
 
-            <h2 className="flex justify-center text-4xl md:text-6xl leading-none mb-8 text-transparent bg-clip-text bg-gradient-main motion-fade-up">
+            <h2 className="flex justify-center text-3xl font-semibold md:text-6xl leading-none mb-8 text-transparent bg-clip-text bg-gradient-main motion-fade-up">
                 Lead Web Developer
             </h2>
 
-            <p className="flex justify-center mb-10 md:mb-16 motion-fade-up">
+            <p className="flex justify-center mb-10 md:mb-16 text-center motion-fade-up">
                 Depuis {seniority}ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui
             </p>
 
@@ -238,8 +235,8 @@ export default function App () {
 
                     const LucideIcon = icon;
                     
-                    return <div key={'skill-' + i} className="p-[1px] rounded-xl shadow-primer-lg bg-gradient-main motion-fade-scale">
-                        <div className="px-6 py-8 h-full bg-white/90 dark:bg-neutral-900/90 rounded-[11px]">
+                    return <div key={'skill-' + i} className="p-[2px] rounded-xl shadow-primer-lg bg-gradient-main shadow-gradient-main motion-fade-scale">
+                        <div className="relative px-6 py-8 h-full bg-white/90 dark:bg-neutral-900/90 rounded-[11px]">
                             <div className="flex flex-row items-start gap-4">
                                 <div className="w-20 min-w-[5rem] py-6 flex justify-center bg-white dark:bg-neutral-900 rounded-xl mb-4">
                                     <LucideIcon />

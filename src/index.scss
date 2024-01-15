@@ -5,15 +5,15 @@
 @layer base {
 
     html {
-        @apply font-sans overflow-x-hidden;
+        @apply font-sans overflow-x-clip;
     }
 
     body {
-        @apply min-h-screen overflow-x-clip text-neutral-700 bg-neutral-100 transition-colors
+        @apply min-h-dvh overflow-x-clip text-neutral-700 bg-neutral-100 transition-colors
             dark:bg-neutral-900 dark:text-neutral-400;
         
         &::before {
-            @apply content-[''] w-screen h-screen absolute top-0 left-0 bg-gradient-to-br via-25% to-50% opacity-25 -z-[1] from-cyan-500 via-fuchsia-500
+            @apply content-[''] w-screen h-screen absolute top-0 left-0 bg-gradient-to-br via-25% to-50% opacity-25 -z-[1] from-blue-500 via-purple-500
                 dark:from-emerald-500 dark:via-lime-500;
             mask: url(assets/path.svg);
         }
@@ -28,39 +28,47 @@
     }
 }
 
-@layer utilities {
+@layer components {
 
     .title {
         @apply text-2xl font-medium;
     }
 
-    button, .button {
-        @apply relative inline-block no-underline cursor-pointer rounded-xl
-                after:content-[''] after:absolute after:w-full after:h-full after:top-0 after:left-0 after:rounded-xl after:-z-[1]
-                after:scale-95 after:bg-transparent after:transition-all
-                hover:after:scale-100 hover:after:bg-purple-950/10
-                active:after:scale-95
-                dark:hover:after:bg-neutral-500/10;
+    .lucide {
+        @apply inline-block;
+    }
 
-        > .lucide { @apply inline-block; }
+    button, .button {
+        @apply relative inline-flex gap-2 items-center no-underline cursor-pointer rounded-xl transition-all
+            before:content-[''] before:absolute before:w-full before:h-full before:top-0 before:left-0 before:rounded-xl
+            before:scale-90 before:bg-transparent before:transition-all
+            hover:before:scale-100 hover:before:bg-neutral-500/10
+            dark:hover:before:bg-neutral-300/10
+            active:scale-90;
+
         > .lottie-icon { @apply -m-1; }
 
         &:not(.button-icon) {
             @apply px-4 py-3;
-
-            > .lucide { @apply first:mr-1; }
-        }
-
-        &-icon {
-            @apply button h-12 w-12 p-3
-                    after:rounded-full;
-
-            > .lucide { @apply align-baseline; }
         }
     }
 
+    .button-icon {
+        @apply button h-12 w-12 p-3 rounded-full before:rounded-full;
+
+        > .lucide { @apply align-baseline; }
+    }
+
+    .menu {
+        @apply absolute top-2 right-2 sm:w-auto flex flex-col outline-none p-2 shadow-xl rounded-2xl overflow-hidden origin-top-right
+            bg-neutral-50 dark:bg-neutral-950;
+    }
+}
+
+@layer utilities {
+
     .bg-gradient-main {
-        @apply bg-gradient-to-br from-blue-500 to-fuchsia-300
+        @apply bg-gradient-to-br from-blue-500 to-purple-400
             dark:from-emerald-500 dark:to-lime-300;
     }
 

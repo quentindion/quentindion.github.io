@@ -4,14 +4,14 @@
   "version": "0.1.2",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.17",
-    "framer-motion": "^10.16.16",
+    "@headlessui/react": "^1.7.18",
+    "framer-motion": "^10.18.0",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.292.0",
     "react": "^18.2.0",
@@ -19,18 +19,18 @@
     "react-responsive": "^9.0.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.45",
+    "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "postcss": "^8.4.32",
-    "sass": "^1.69.5",
-    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.33",
+    "sass": "^1.69.7",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^4.5.1"
   }

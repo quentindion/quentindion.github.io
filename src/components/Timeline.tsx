@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Experience } from "./App";
+import { Experience } from "../App";
 
 export default function Timeline ({experiences}: {experiences: Experience[]}) {
     return <div className="w-full grid grid-cols-1-1-3 gap-6">
