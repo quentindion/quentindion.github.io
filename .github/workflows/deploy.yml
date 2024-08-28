@@ -35,6 +35,8 @@ jobs:
         run: npm ci
 
       - name: Make changelog file from last commits
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node make-changelog.js
       
       - name: Setup Pages
