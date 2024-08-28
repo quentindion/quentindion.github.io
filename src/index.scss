@@ -5,8 +5,9 @@
 @layer base {
 
     html {
-        @apply font-sans text-neutral-950 transition-colors
-            dark:bg-neutral-900 dark:text-neutral-50;
+        @apply font-sans bg-neutral-50 text-neutral-950 transition-colors
+            dark:bg-neutral-900 dark:text-white
+            selection:bg-accent-500 selection:text-white;
     }
 
     #root {
@@ -14,17 +15,21 @@
     }
 
     h1 {
-        @apply font-black text-6xl md:text-8xl;
+        @apply font-bold leading-none tracking-tight text-6xl md:text-7xl;
     }
 
     h2 {
-        @apply font-black text-2xl mb-4
+        @apply text-2xl font-semibold leading-none tracking-tight mb-4
             after:content-[''] after:inline-block after:size-2 after:ml-1 after:rounded-full after:bg-gradient-to-br
-            after:from-cyan-500 after:to-blue-500;
+            after:gradient-primary;
     }
     
     h3 {
-        @apply font-black text-xl inline-block mb-2;
+        @apply text-lg font-semibold leading-none tracking-tight mb-4;
+    }
+
+    a {
+        @apply underline underline-offset-2 hover:decoration-transparent transition-colors;
     }
 }
 
@@ -34,18 +39,14 @@
         @apply relative max-w-screen-xl w-full px-8 self-center;
     }
 
-    .menu {
-        @apply relative flex flex-wrap max-w-screen-sm rounded-[23px] p-1 bg-white/50 backdrop-blur-xl shadow-sm
-            dark:bg-black/50;
-    }
-
     button, .button {
-        @apply relative text-sm font-semibold inline-flex gap-2 items-center cursor-pointer rounded-3xl transition-all
-            before:content-[''] before:absolute before:w-full before:h-full before:top-0 before:left-0 before:rounded-3xl
-            before:scale-90 before:bg-transparent before:transition-all
-            hover:before:scale-100 hover:before:bg-neutral-500/10
-            dark:hover:before:bg-neutral-300/10
-            active:before:scale-90;
+        @apply relative text-sm font-bold inline-flex gap-2 items-center cursor-pointer rounded-3xl no-underline transition-all
+            before:content-[''] before:absolute before:inset-0 before:top-0 before:left-0 before:rounded-3xl
+            before:scale-125 before:bg-transparent before:transition-all
+            hover:before:scale-100 hover:before:bg-neutral-900 hover:text-white
+            dark:hover:before:bg-white dark:hover:text-black
+            active:before:scale-90
+            *:relative;
 
         &:not(.button-icon) {
             @apply px-3 py-1.5;
@@ -56,8 +57,37 @@
         @apply button h-9 w-9 rounded-full before:rounded-full items-center justify-center;
     }
 
-    .label {
-        @apply block text-sm font-semibold px-1.5 rounded-full outline outline-2;
+    .card {
+        --spotlight-x: 0;
+        --spotlight-y: -100vh;
+        --spotlight-color: theme(colors.primary.500/10%);
+        --spotlight-border-from: theme(colors.accent.500/100%);
+        --spotlight-border-to: theme(colors.primary.500/80%);
+
+        @apply relative p-[1px] rounded-[13px] transition-colors shadow-sm
+            bg-[radial-gradient(100rem_circle_at_var(--spotlight-x)_var(--spotlight-y),_var(--spotlight-border-from),_var(--spotlight-border-to),_#e5e5e5_15%)]
+            dark:bg-[radial-gradient(100rem_circle_at_var(--spotlight-x)_var(--spotlight-y),_var(--spotlight-border-from),_var(--spotlight-border-to),_#262626_15%)]
+            before:content-[''] before:size-full before:absolute before:top-0 before:left-0 before:rounded-[13px] before:transition-opacity
+            before:bg-[radial-gradient(60rem_circle_at_var(--spotlight-x)_var(--spotlight-y),_var(--spotlight-color),_transparent_35%)]
+            before:opacity-0
+            hover:before:opacity-100;
+    }
+
+    .card-content { @apply rounded-xl p-4 size-full bg-white dark:bg-neutral-900 *:relative; }
+
+    .labels { @apply flex flex-wrap gap-2; }
+    .label { @apply text-sm font-semibold tracking-tight px-1.5 rounded-md bg-neutral-700 text-white; }
+
+    pre.code {
+        @apply flex flex-col text-xs whitespace-pre-wrap;
+
+        &::before { counter-reset: listing; }
+        
+        > code { counter-increment: listing; }
+        > code::before {
+            @apply inline-block w-8 text-right opacity-50;
+            content: counter(listing)" ";
+        }
     }
 }
 
@@ -70,20 +100,9 @@
     .motion-fade-right,
     .motion-fade-scale { @apply invisible; }
 
+    .gradient-primary { @apply from-accent-500 to-primary-600 dark:from-accent-300 dark:to-primary-500; }
+
     .text-gradient { @apply bg-gradient-to-br bg-clip-text text-transparent; }
 
-    .text-gradient-primary { @apply text-gradient from-cyan-500 to-blue-600; }
-    .text-accent-1 { @apply text-gradient from-lime-500 to-emerald-600; }
-    .text-accent-2 { @apply text-gradient from-pink-500 to-purple-600; }
-    .text-accent-3 { @apply text-gradient from-stone-500 to-black dark:from-white dark:to-stone-600; }
-
-    .shadow-primary { @apply shadow-blue-100 dark:shadow-blue-950; }
-    .shadow-accent-1 { @apply shadow-emerald-100 dark:shadow-emerald-950; }
-    .shadow-accent-2 { @apply shadow-purple-100 dark:shadow-purple-950; }
-    .shadow-accent-3 { @apply shadow-stone-300 dark:shadow-stone-800; }
-
-    .border-primary { @apply from-cyan-300 via-blue-300 dark:from-cyan-700 dark:via-blue-900; }
-    .border-accent-1 { @apply from-lime-300 via-emerald-300 dark:from-lime-700 dark:via-emerald-900; }
-    .border-accent-2 { @apply from-pink-300 via-purple-300 dark:from-pink-700 dark:via-purple-900; }
-    .border-accent-3 { @apply from-black via-stone-500 dark:from-neutral-100 dark:via-stone-500; }
+    .text-gradient-primary { @apply text-gradient gradient-primary; }
 }

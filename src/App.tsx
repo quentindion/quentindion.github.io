@@ -1,12 +1,12 @@
-import { createElement, ReactNode, useRef } from 'react';
-import { LucideIcon, Sun, Moon, SunMoon, AtSign, Check } from 'lucide-react';
-import { AnimatePresence, Variants, motion } from "framer-motion";
+import { ComponentPropsWithoutRef, forwardRef, Fragment, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { LucideIcon, Sun, Moon, AtSign, SquareArrowOutUpRight } from 'lucide-react';
 import { SiGithub, SiLinkedin, SiYoutube } from '@icons-pack/react-simple-icons';
-import wavingHand from '../src/assets/Waving Hand.png'
-import { cn } from './utils/cn.js';
-import { useBoolean, useLocalStorage, useOnClickOutside } from 'usehooks-ts';
-import { AuroraBackground } from './components/AuroraBackground.js';
-import useAnimateInView from './hooks/useAnimateInView.js';
+import wavingHand from '../src/assets/Waving Hand.webp'
+import { cn } from './utils';
+import { useLocalStorage } from 'usehooks-ts';
+import useAnimateInView from './useAnimateInView';
+import { animate, motion, MotionValue, useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { version } from '../package.json';
 
 declare global {
     function applyTheme(): void
@@ -77,42 +77,16 @@ export default function App () {
 
     const [theme, setTheme, removeTheme] = useLocalStorage<Theme>('theme', null);
 
-    const updateTheme = (theme?: Theme) => {
+    const updateTheme = () => {
 
-        if(theme) setTheme(theme);
-        else removeTheme();
+        if(theme === null && window.matchMedia('prefers-color-scheme: dark').matches)
+            setTheme('light');
+        else if(theme === null && !window.matchMedia('prefers-color-scheme: dark').matches)
+            setTheme('dark');
+        else
+            removeTheme();
 
         window.applyTheme();
-
-        closeThemeMenu();
-    };
-
-    const { value: themeMenuOpened, setTrue: openThemeMenu, setFalse: closeThemeMenu } = useBoolean(false);
-
-    const themeMenuRef = useRef<HTMLElement>(null);
-
-    useOnClickOutside(themeMenuRef, closeThemeMenu);
-
-    const menuAnimations: Variants = {
-        initial: {
-            scale: 0,
-            opacity: 0
-        },
-        animate: {
-            scale: 1,
-            opacity: 1,
-            transition: {
-                delayChildren: 0.10,
-                staggerChildren: 0.05
-            }
-        },
-        exit: {opacity: 0}
-    };
-
-    const menuItemAnimation: Variants = {
-        initial: {y: -30, opacity: 0},
-        animate: {y: 0, opacity: 1},
-        exit: {opacity: 0}
     };
 
     useAnimateInView('.motion-fade', {initial: {opacity: 0}, animate: {opacity: 1}});
@@ -122,22 +96,56 @@ export default function App () {
     useAnimateInView('.motion-fade-right', {initial: {opacity: 0, x: 25}, animate: {opacity: 1, x: 0}});
     useAnimateInView('.motion-fade-scale', {initial: {opacity: 0, scale: 0}, animate: {opacity: 1, scale: 1}});
 
+    const mouseX = useMotionValue(window.innerWidth / 2);
+    const mouseY = useMotionValue((window.innerHeight / 2) + window.scrollY);
+
+    useEffect(() => {
+
+        const updateMousePosition = (event: MouseEvent) => {
+            animate(mouseX, event.clientX, {duration: 0});
+            animate(mouseY, event.clientY, {duration: 0});
+        };
+
+        window.addEventListener('mousemove', updateMousePosition);
+
+        return () => {
+            window.removeEventListener('mousemove', updateMousePosition);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const [changelog, setChangelog] = useState<unknown[]>([]);
+
+    useEffect(() => {
+
+        fetch('changelog.json')
+            .then(response => response.json() as Promise<{commits: {oid: string, message: string, author: {date: string}}[]}>)
+            .then(response => response.commits.map(({message, author: {date}}) => ({message, date})))
+            .then(setChangelog);
+
+    }, []);
+
     return <>
-        <AuroraBackground />
+        {/* <BackgroundBeams /> */}
+        <div className="relative">
+            <div className="absolute h-screen w-full bg-[radial-gradient(#71717a40_1px,transparent_1px)] [background-size:16px_16px] 
+                [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+        </div>
+
         <section className="h-12"></section>
 
         <section className="container self-center items-start inline-flex w-auto gap-2">
             <nav className="menu motion-fade-down">
                 <a className="group button" href="https://github.com/quentindion" role="button" aria-label="Github">
-                    <SiGithub className="group-hover:text-[#181717] transition-colors" />
+                    <SiGithub className="dark:group-hover:text-[#181717] group-hover:text-neutral-50" />
                     <span>Github</span>
                 </a>
                 <a className="group button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
-                    <SiYoutube className="group-hover:text-[#ff0000] transition-colors" />
+                    <SiYoutube className="group-hover:text-[#ff0000]" />
                     <span>Youtube</span>
                 </a>
                 <a className="group button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
-                    <SiLinkedin className="group-hover:text-[#0A66C2] transition-colors" />
+                    <SiLinkedin className="group-hover:text-[#0A66C2]" />
                     <span>LinkedIn</span>
                 </a>
                 <a className="group button" onClick={mailMe} role="button" aria-label="Mail">
@@ -145,148 +153,269 @@ export default function App () {
                     <span>Mail</span>
                 </a>
             </nav>
-            <nav className="menu motion-fade-down" ref={themeMenuRef}>
-                <button className="relative button-icon" onClick={() => openThemeMenu()}>
-                    {theme === 'dark' ? <Moon /> :
-                    theme === 'light' ? <Sun /> :
-                    <SunMoon />}
+            <nav className="menu motion-fade-down">
+                <button className="relative button-icon" onClick={updateTheme} aria-label="Thème">
+                    {(theme === 'dark' && window.matchMedia('screen').matches) || (!theme && window.matchMedia('screen and (prefers-color-scheme: dark)').matches) ?
+                        <Sun /> :
+                        <Moon />}
                 </button>
-                <AnimatePresence>
-                {themeMenuOpened && <motion.div className="absolute menu flex-col overflow-hidden top-0 right-0 bg-white dark:bg-black shadow-xl" 
-                    initial="initial" animate="animate" exit="exit" variants={menuAnimations}>
-                    <motion.div variants={menuItemAnimation}>
-                        <button onClick={() => updateTheme()} className="w-full"><SunMoon /> Auto</button>
-                    </motion.div>
-                    <motion.div variants={menuItemAnimation}>
-                        <button onClick={() => updateTheme("light")} className="w-full"><Sun /> Clair</button>
-                    </motion.div>
-                    <motion.div variants={menuItemAnimation}>
-                        <button onClick={() => updateTheme("dark")} className="w-full"><Moon /> Sombre</button>
-                    </motion.div>
-                </motion.div>}
-                </AnimatePresence>
             </nav>
         </section>
 
-        <section className="container mt-20 md:mt-36 flex flex-col">
-            <div className="font-medium text-lg md:text-xl text-neutral-600 dark:text-neutral-400 motion-fade-up">
-                Hello <img src={wavingHand} className="inline size-8 align-text-bottom" />, je suis Quentin Dion
+        <section className="container mt-20 md:mt-32 flex flex-col">
+            <div className="font-medium text-lg text-neutral-600 dark:text-neutral-400 motion-fade-up">
+                Hello <img src={wavingHand} alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
             </div>
             <h1 className="motion-fade-up drop-shadow-md dark:shadow-black">
                 Lead Web
                 <span className="text-gradient-primary"> Developer</span>
             </h1>
-            <p className="font-medium text-lg md:text-xl max-w-screen-md text-neutral-600 dark:text-neutral-400 motion-fade-up">
+            <p className="font-medium text-lg max-w-screen-md text-neutral-600 dark:text-neutral-400 motion-fade-up">
                 Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.
             </p>
         </section>
 
-        <section className="container mt-20 md:mt-36">
+        <section className="container mt-20 md:mt-32">
             <h2 className="motion-fade-up">Compétences</h2>
             <div className="flex flex-wrap items-stretch justify-start gap-8">
-                <Card className="shadow-primary motion-fade-scale" borderClassName="border-primary">
-                    <CardTitle className="text-gradient-primary">Interface Web & UI</CardTitle>
-                    <CardLabels>
-                        <Label>React</Label>
-                        <Label>Angular</Label>
-                        <Label>HTML</Label>
-                        <Label>Sass</Label>
-                        <Label>Tailwind</Label>
-                    </CardLabels>
-                    <p className="relative text-pretty">
-                        Développement de <span className="font-semibold text-gradient-primary">PWA </span>
-                        et <span className="font-semibold text-gradient-primary">d'interfaces utilisateur </span>
-                        pour de la gestion métier (planifications, gestion de ressources internes).
-                    </p>
-                </Card>
-                <Card className="shadow-accent-1 motion-fade-scale" borderClassName="border-accent-1">
-                    <CardTitle className="text-accent-1">Base de donnée & BI</CardTitle>
-                    <CardLabels>
-                        <Label>Qlik Sense</Label>
-                        <Label>Power BI</Label>
-                        <Label>MSSQL</Label>
-                        <Label>Postgres</Label>
-                        <Label>MongoDB</Label>
-                        <Label>Supabase</Label>
-                    </CardLabels>
-                    <p className="relative text-pretty">
-                        Gestion de <span className="font-semibold text-accent-1">bases de données </span>
-                        pour des applications temps réel et agrégation de données multi-plateformes en indicateurs de gestion pour des
-                        <span className="font-semibold text-accent-1"> rapports BI </span>
-                        publiés aux collaborateurs.
-                    </p>
-                </Card>
-                <Card className="shadow-accent-2 motion-fade-scale" borderClassName="border-accent-2">
-                    <CardTitle className="text-accent-2">Applications & API</CardTitle>
-                    <CardLabels>
-                        <Label>PHP</Label>
-                        <Label>Laravel</Label>
-                        <Label>NodeJS</Label>
-                        <Label>ElectronJS</Label>
-                    </CardLabels>
-                    <p className="relative text-pretty">
-                        Développement d'<span className="font-semibold text-accent-2">API </span>
-                        backend pour intranet et applications mobiles, d'
-                        <span className="font-semibold text-accent-2">applications de bureau </span>
-                        et de tâches automatiques d'intégration de données.
-                    </p>
-                </Card>
-                <Card className="shadow-accent-3 motion-fade-scale" borderClassName="border-accent-3">
-                    <CardTitle className="text-accent-3">CMS</CardTitle>
-                    <CardLabels>
-                        <Label>Wordpress</Label>
-                    </CardLabels>
-                    <p className="relative text-pretty">
-                        Maintenance de sites internet et développement de plugins et thèmes sous
-                        <span className="font-semibold text-accent-3"> Wordpress</span>.
-                    </p>
-                </Card>
+                <div className="flex-[1_1_28rem] motion-fade-scale">
+                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                        <h3>Interface Web & UI</h3>
+                        <div className="labels mb-4">
+                            <div className="label">React</div>
+                            <div className="label">Angular</div>
+                            <div className="label">HTML</div>
+                            <div className="label">Sass</div>
+                            <div className="label">Tailwind</div>
+                        </div>
+                        <p className="relative text-pretty">
+                            Développement de <span className="font-semibold">PWA </span>
+                            et <span className="font-semibold">d'interfaces utilisateur </span>
+                            pour de la gestion métier (planifications, gestion de ressources internes).
+                        </p>
+                    </Card>
+                </div>
+                <div className="flex-[1_1_28rem] motion-fade-scale">
+                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                        <h3>Base de donnée & BI</h3>
+                        <div className="labels mb-4">
+                            <div className="label">Qlik Sense</div>
+                            <div className="label">Power BI</div>
+                            <div className="label">MSSQL</div>
+                            <div className="label">Postgres</div>
+                            <div className="label">MongoDB</div>
+                            <div className="label">Supabase</div>
+                        </div>
+                        <p className="relative text-pretty">
+                            Gestion de <span className="font-semibold">bases de données </span>
+                            pour des applications temps réel et agrégation de données multi-plateformes en indicateurs de gestion pour des
+                            <span className="font-semibold"> rapports BI </span>
+                            publiés aux collaborateurs.
+                        </p>
+                    </Card>
+                </div>
+                <div className="flex-[1_1_28rem] motion-fade-scale">
+                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                        <h3>Applications & API</h3>
+                        <div className="labels mb-4">
+                            <div className="label">PHP</div>
+                            <div className="label">Laravel</div>
+                            <div className="label">NodeJS</div>
+                            <div className="label">ElectronJS</div>
+                        </div>
+                        <p className="relative text-pretty">
+                            Développement d'<span className="font-semibold">API </span>
+                            backend pour intranet et applications mobiles, d'
+                            <span className="font-semibold">applications de bureau </span>
+                            et de tâches automatiques d'intégration de données.
+                        </p>
+                    </Card>
+                </div>
+                <div className="flex-[1_1_28rem] motion-fade-scale">
+                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                        <h3>CMS</h3>
+                        <div className="labels">
+                            <div className="label mb-4">Wordpress</div>
+                        </div>
+                        <p className="relative text-pretty">
+                            Maintenance de sites internet et développement de plugins et thèmes sous
+                            <span className="font-semibold"> Wordpress</span>.
+                        </p>
+                    </Card>
+                </div>
             </div>
         </section>
 
-        <section className="container mt-20 md:mt-36">
+        <section className="container mt-20 md:mt-32">
             <h2 className="motion-fade-up">Expériences</h2>
             <Timeline items={experiences} />
         </section>
 
-        <section className="container mt-20 md:mt-36">
+        <section className="container mt-20 md:mt-32 z-[3] bg-neutral-50 dark:bg-neutral-900">
             <h2 className="motion-fade-up">Formations</h2>
             <Timeline items={training} />
         </section>
 
-        <section className="h-44 md:h-48"></section>
+        <section className="relative bg-neutral-800 z-[2]">
+            <div className="h-8 bg-neutral-50 dark:bg-neutral-900 rounded-b-xl shadow-lg  shadow-black"></div>
+        </section>
+
+        <section className="relative flex flex-col flex-wrap bg-neutral-800 text-white z-[1]">
+            <div className="container mt-16 mb-20 md:mb32 flex flex-wrap items-stretch justify-center gap-4">
+                <div className="flex flex-col gap-4 flex-auto">
+                    <Code content={{
+                        about: {
+                            version,
+                            social: {
+                                github: "https://github.com/quentindion",
+                                youtube: "https://www.youtube.com/@vs2kf",
+                                linkedin: "https://www.linkedin.com/in/quentindion"
+                            }
+                        }
+                    }} />
+                    <Code content={{
+                        resources: [
+                            "https://vitejs.dev",
+                            "https://tailwindcss.com",
+                            "https://www.framer.com/motion",
+                            "https://lucide.dev"
+                        ]
+                    }}/>
+                </div>
+                <Code className="flex-auto" content={{changelog}} />
+            </div>
+        </section>
     </>
 }
 
-const Card = ({children, className, borderClassName}: {children: ReactNode, className?: string, borderClassName?: string}) => 
-    <div className={cn("relative flex-[1_1_28rem] rounded-[13px] shadow-2xl", className)}>
-        <div className={cn("absolute -bottom-[1px] -right-[1px] w-4/5 h-4/5 rounded-br-[13px] bg-gradient-to-tl to-transparent to-50%", borderClassName)} />
-        <div className="relative size-full p-4 rounded-xl backdrop-blur-3xl bg-white/75 dark:bg-black/75">
-            {children}
+const Card = motion(forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'> & {mouseX: MotionValue<number>, mouseY: MotionValue<number>}>(
+    ({children, className, mouseX, mouseY}, forwardedRef) => {
+
+        const ref = useRef<HTMLDivElement>(null);
+        useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement);
+
+        const refX = useMotionValue(0);
+        const refY = useMotionValue(0);
+
+        useEffect(() => {
+            
+            const updateRefPosition = () => {
+                if(ref.current) {
+                    animate(refX, ref.current.getBoundingClientRect().left, {duration: 0});
+                    animate(refY, ref.current.getBoundingClientRect().top, {duration: 0});
+                }
+            }
+
+            updateRefPosition();
+            window.addEventListener('scroll', updateRefPosition);
+
+            return () => {
+                window.removeEventListener('scroll', updateRefPosition);
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [])
+
+        const relativeX = useTransform<number, string>([mouseX, refX], ([mouseX, refX]) => `${ref.current ? mouseX - refX : mouseX}px`);
+        const relativeY = useTransform<number, string>([mouseY, refY], ([mouseY, refY]) => `${ref.current ? mouseY - refY : mouseY}px`);
+
+        return <motion.div ref={ref} className={cn("card", className)} style={{
+            '--spotlight-x': relativeX,
+            '--spotlight-y': relativeY,
+        }}
+        whileHover={{
+            scale: 1.025
+        }}>
+            <div className="card-content">{children}</div>
+        </motion.div>
+    })
+);
+
+const Timeline = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'> & {items: Experience[]}>(
+    ({items, className}, forwardedRef) => {
+
+        const ref = useRef<HTMLDivElement>(null);
+        useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement);
+
+        const { scrollY } = useScroll();
+
+        const relativeScrollY = useTransform(scrollY, () => {
+            if(ref.current) {
+                const {top, height} = ref.current.getBoundingClientRect();
+                return `${Math.max(Math.min(window.innerHeight - top - 176, height), 0)}px`
+            }
+        });
+
+        return <div ref={ref} className={cn("relative", className)}>
+            <div className="absolute left-0 md:left-40 w-1 h-full rounded-md bg-neutral-200 dark:bg-neutral-700">
+                <motion.div className="top-0 h-[50px] w-1 rounded-md bg-gradient-to-b gradient-primary" style={{height: relativeScrollY}}></motion.div>
+            </div>
+            {items.map(({dates, title, company, description}, i) => <div key={i} className="relative flex flex-col items-start w-[calc(100%_-_2rem)] ml-8 mb-10 
+                md:ml-48 md:w-[calc(100%_-_12rem)]">
+                {dates[0] && <h3 className="w-[8rem] -ml-4 motion-fade-right md:absolute md:text-right md:-ml-48">{dates[0]}</h3>}
+                <h3 className="mb-2 motion-fade-left">{title}</h3>
+                {company && <h3 className="mb-2 font-bold text-gradient-primary motion-fade-left">{company}</h3>}
+                <p className="text-neutral-600 dark:text-neutral-400 motion-fade-left">{description}</p>
+                {dates[1] && <h3 className="w-[8rem] -ml-4 mt-4 mb-0 motion-fade-right md:absolute md:text-right md:-ml-48 md:bottom-0">{dates[1]}</h3>}
+            </div>)}
         </div>
-    </div>
+    }
+);
 
-const CardTitle = ({children, className}: {children: ReactNode, className?: string}) =>
-    <h3 className={cn("bg-gradient-to-br", className)}>{children}</h3>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Code = forwardRef<HTMLPreElement, Omit<ComponentPropsWithoutRef<'pre'>, 'content'> & {content: unknown}>(({className, content}, ref) => {
+    
+    const parse = (content: unknown, prop?: string, indent: number = -1): JSX.Element => {
 
-const CardLabels = ({children, className}: {children: ReactNode, className?: string}) =>
-    <div className={cn("flex flex-wrap gap-2 mb-2", className)}>{children}</div>
+        const isObject = (item: unknown): item is object => Object.prototype.toString.call(item) === "[object Object]";
+        const isArray = (item: unknown): item is Array<unknown> => Array.isArray(item);
+        const isNumeric = (item: unknown): item is string => /^[\d.]+$/i.test(item as string);
+        const isLink = (item: unknown): item is string => /^(https?:\/\/)?([\da-z.-]+)\.([a-z]{2,6})([/\w.-]*)*\/?/i.test(item as string);
 
-const Label = ({children, className, icon = Check}: {children: ReactNode, className?: string, icon?: LucideIcon}) => {
-    const iconElement = createElement(icon, {className: "inline size-4 mr-0.5"});
-    return <span className={cn("text-sm font-semibold px-1.5 rounded-full bg-neutral-500/5 border dark:bg-neutral-500/20 dark:border-neutral-700", className)}>{iconElement}{children}</span>
-}
+        const padLeft = indent > 0 ? '    '.repeat(indent - 1) : '';
 
-const Timeline = ({items, className}: {items: Experience[], className?: string}) => <div className={cn("relative", className)}>
-    <div className="absolute left-0 md:left-40 w-1 h-full bg-neutral-200 dark:bg-neutral-700 rounded-full" style={{clipPath: 'xywh(0 0 100% 100% round 3px 3px)'}}>
-        <div className="fixed top-0 h-[76vh] w-1 rounded-full bg-gradient-to-b from-cyan-500 to-blue-500"></div>
-    </div>
-    {items.map(({dates, title, company, description}, i) => <div key={i} className="relative flex flex-col items-start w-[calc(100%_-_2rem)] ml-8 mb-10 
-        md:ml-48 md:w-[calc(100%_-_12rem)]">
-        {dates[0] && <h3 className="w-[8rem] -ml-4 motion-fade-right md:absolute md:text-right md:-ml-48">{dates[0]}</h3>}
-        <h3 className="mb-0 text-gradient-primary motion-fade-left">{title}</h3>
-        {company && <div className="font-bold text-xl motion-fade-left">{company}</div>}
-        <p className="text-neutral-600 dark:text-neutral-400 motion-fade-left">{description}</p>
-        {dates[1] && <h3 className="w-[8rem] -ml-4 mt-4 mb-0 motion-fade-right md:absolute md:text-right md:-ml-48 md:bottom-0">{dates[1]}</h3>}
-    </div>)}
-</div>
+        return <>
+            {indent === 0 ? <>
+                <code>
+                    <span className="text-cyan-400">const </span> 
+                    <span className="text-blue-400">{prop}</span>
+                    <span className="text-red-400">: </span>
+                    <span className="text-blue-400 capitalize">
+                        {isObject(content) ? prop : 
+                        isArray(content) ? <>
+                            Array
+                            <span className="text-purple-400">{'<'}</span>
+                            {typeof content[0]}
+                            <span className="text-purple-400">{'>'}</span>
+                        </> : 
+                        typeof content}
+                    </span>
+                    <span className="text-red-400"> = </span>
+                    {isObject(content) ? '{' : isArray(content) ? '[' : ''}
+                </code>
+                {parse(content, undefined, indent + 1)}
+                <code>
+                    {isObject(content) ? '}' : isArray(content) ? ']' : ''}
+                </code>
+            </> :
+            isObject(content) ? <>
+                {indent > 1 && <code>{padLeft}{prop && <><span className="text-cyan-400">{prop}</span>: </>}{'{'}</code>}
+                {Object.entries(content).map(([prop, item]) => <Fragment key={prop}>{parse(item, prop, indent + 1)}</Fragment>)}
+                {indent > 1 && <code>{padLeft}{'}'}</code>}
+            </> :
+            isArray(content) ? <>
+                {indent > 1 && <code>{padLeft}{prop && <><span className="text-cyan-400">{prop}</span>: </>}{'['}</code>}
+                {content.map((item, i) => <Fragment key={i}>{parse(item, undefined, indent + 1)}</Fragment>)}
+                {indent > 1 && <code>{padLeft}{']'}</code>}
+            </> :
+            <code>
+                {padLeft}
+                {prop && <><span className="text-cyan-400">{prop}</span>: </>}
+                {isNumeric(content) ? <span className="text-purple-400">{content}</span> : 
+                isLink(content) ? <span className="text-red-400"><a href={content}>{content}</a> <SquareArrowOutUpRight className="inline-block size-3" /></span> :
+                <><span className="text-yellow-400">"{content as string}"</span></>}
+            </code>}
+        </>;
+    }
+    
+    return <pre ref={ref} className={cn("code", className)}>{parse(content)}</pre>;
+});

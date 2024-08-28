@@ -1,5 +1,5 @@
-import { DOMKeyframesDefinition, animate } from 'framer-motion';
 import { useEffect } from 'react';
+import { DOMKeyframesDefinition, animate } from 'framer-motion';
 
 export default function useAnimateInView(
     selector: string,
@@ -27,13 +27,10 @@ export default function useAnimateInView(
                 visibles.forEach(e => e.classList.add('motion-in-view-animated'));
                 animate(visibles.map(e => [e, variants.animate as DOMKeyframesDefinition, {type: 'spring', duration: 0.75, at: '-0.7'}]));
             }
-        
         });
 
         elements.forEach(e => observer.observe(e));
 
-        return () => {
-            elements.forEach(e => observer.unobserve(e));
-        }
+        return () => { elements.forEach(e => observer.unobserve(e)); }
     }, [selector, variants]);
 }

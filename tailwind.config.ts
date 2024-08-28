@@ -1,8 +1,8 @@
 import type { Config } from 'tailwindcss'
-import { default as flattenColorPalette } from 'tailwindcss/lib/util/flattenColorPalette';
 import { fontFamily } from 'tailwindcss/defaultTheme';
-import { KeyValuePair } from 'tailwindcss/types/config';
-import plugin from 'tailwindcss/plugin'
+import colors from 'tailwindcss/colors'
+// import { default as flattenColorPalette } from 'tailwindcss/lib/util/flattenColorPalette';
+// import plugin from 'tailwindcss/plugin'
 
 export default {
     content: [
@@ -17,26 +17,25 @@ export default {
                 }
             },
             fontFamily: {
-                sans: ['"Inter"', ...fontFamily.sans],
+                sans: ['"Inter Sans"', ...fontFamily.sans],
             },
-            animation: {
-                aurora: "aurora 60s linear infinite"
-            },
-            keyframes: {
-                aurora: {
-                    from: { backgroundPosition: "50% 50%, 50% 50%" },
-                    to: { backgroundPosition: "350% 50%, 350% 50%" },
-                }
-            },
+            colors: {
+                primary: colors.emerald,
+                accent: colors.lime
+            }
         },
     },
     darkMode: 'selector',
     plugins: [
-        plugin(({addBase, theme}) => {
-            addBase({":root": Object.fromEntries(
-                Object.entries(flattenColorPalette(theme("colors")))
-                      .map(([key, val]) => [`--${key}`, val])) as KeyValuePair
-            });
-        }),
+        // plugin(({theme, addUtilities}) => {
+        //     addUtilities(
+        //         Object.entries(flattenColorPalette(theme("colors")))
+        //             .reduce((values, [key, val]) => ({
+        //                 ...values,
+        //                 [`.spotlight-${key}`]: {'--spotlight-color': `${val}${Math.floor(255 * 0.1).toString(16)}`},
+        //                 [`.spotlight-border-${key}`]: {'--spotlight-border': `${val}${Math.floor(255 * 0.75).toString(16)}`}
+        //             }), {})
+        //     );
+        // }),
     ],
 } satisfies Config
