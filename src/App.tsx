@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, forwardRef, Fragment, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { ComponentPropsWithoutRef, forwardRef, Fragment, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { LucideIcon, Sun, Moon, AtSign, SquareArrowOutUpRight } from 'lucide-react';
 import { SiGithub, SiLinkedin, SiYoutube } from '@icons-pack/react-simple-icons';
 import wavingHand from '../src/assets/Waving Hand.webp'
@@ -120,148 +120,164 @@ export default function App () {
 
         fetch('changelog.json')
             .then(response => response.json() as Promise<{commits: {oid: string, message: string, author: {date: string}}[]}>)
-            .then(response => response.commits.map(({message, author: {date}}) => ({message, date})))
+            .then(response => response.commits.map(({message, author: {date}}) => {
+                const lines = message.split('\n');
+                return ({message: lines.length > 1 ? lines : message, date});
+            }))
             .then(setChangelog);
 
     }, []);
 
+    const [footerHeight, setFooterHeight] = useState(0);
+
+    const footerSizeRef = useCallback((node: HTMLElement) => {
+        if(node)
+            setFooterHeight(node.getBoundingClientRect().height);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [changelog]);
+
     return <>
         {/* <BackgroundBeams /> */}
-        <div className="relative">
-            <div className="absolute h-screen w-full bg-[radial-gradient(#71717a40_1px,transparent_1px)] [background-size:16px_16px] 
-                [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
-        </div>
+        <article className="relative flex flex-col z-[3] bg-neutral-50 dark:bg-neutral-900">
 
-        <section className="h-12"></section>
-
-        <section className="container self-center items-start inline-flex w-auto gap-2">
-            <nav className="menu motion-fade-down">
-                <a className="group button" href="https://github.com/quentindion" role="button" aria-label="Github">
-                    <SiGithub className="dark:group-hover:text-[#181717] group-hover:text-neutral-50" />
-                    <span>Github</span>
-                </a>
-                <a className="group button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
-                    <SiYoutube className="group-hover:text-[#ff0000]" />
-                    <span>Youtube</span>
-                </a>
-                <a className="group button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
-                    <SiLinkedin className="group-hover:text-[#0A66C2]" />
-                    <span>LinkedIn</span>
-                </a>
-                <a className="group button" onClick={mailMe} role="button" aria-label="Mail">
-                    <AtSign />
-                    <span>Mail</span>
-                </a>
-            </nav>
-            <nav className="menu motion-fade-down">
-                <button className="relative button-icon" onClick={updateTheme} aria-label="Thème">
-                    {(theme === 'dark' && window.matchMedia('screen').matches) || (!theme && window.matchMedia('screen and (prefers-color-scheme: dark)').matches) ?
-                        <Sun /> :
-                        <Moon />}
-                </button>
-            </nav>
-        </section>
-
-        <section className="container mt-20 md:mt-32 flex flex-col">
-            <div className="font-medium text-lg text-neutral-600 dark:text-neutral-400 motion-fade-up">
-                Hello <img src={wavingHand} alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
+            <div className="relative">
+                <div className="absolute h-screen w-full bg-[radial-gradient(#71717a40_1px,transparent_1px)] [background-size:16px_16px] 
+                    [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
             </div>
-            <h1 className="motion-fade-up drop-shadow-md dark:shadow-black">
-                Lead Web
-                <span className="text-gradient-primary"> Developer</span>
-            </h1>
-            <p className="font-medium text-lg max-w-screen-md text-neutral-600 dark:text-neutral-400 motion-fade-up">
-                Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.
-            </p>
-        </section>
+            
+            <section className="h-12"></section>
 
-        <section className="container mt-20 md:mt-32">
-            <h2 className="motion-fade-up">Compétences</h2>
-            <div className="flex flex-wrap items-stretch justify-start gap-8">
-                <div className="flex-[1_1_28rem] motion-fade-scale">
-                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
-                        <h3>Interface Web & UI</h3>
-                        <div className="labels mb-4">
-                            <div className="label">React</div>
-                            <div className="label">Angular</div>
-                            <div className="label">HTML</div>
-                            <div className="label">Sass</div>
-                            <div className="label">Tailwind</div>
-                        </div>
-                        <p className="relative text-pretty">
-                            Développement de <span className="font-semibold">PWA </span>
-                            et <span className="font-semibold">d'interfaces utilisateur </span>
-                            pour de la gestion métier (planifications, gestion de ressources internes).
-                        </p>
-                    </Card>
-                </div>
-                <div className="flex-[1_1_28rem] motion-fade-scale">
-                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
-                        <h3>Base de donnée & BI</h3>
-                        <div className="labels mb-4">
-                            <div className="label">Qlik Sense</div>
-                            <div className="label">Power BI</div>
-                            <div className="label">MSSQL</div>
-                            <div className="label">Postgres</div>
-                            <div className="label">MongoDB</div>
-                            <div className="label">Supabase</div>
-                        </div>
-                        <p className="relative text-pretty">
-                            Gestion de <span className="font-semibold">bases de données </span>
-                            pour des applications temps réel et agrégation de données multi-plateformes en indicateurs de gestion pour des
-                            <span className="font-semibold"> rapports BI </span>
-                            publiés aux collaborateurs.
-                        </p>
-                    </Card>
-                </div>
-                <div className="flex-[1_1_28rem] motion-fade-scale">
-                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
-                        <h3>Applications & API</h3>
-                        <div className="labels mb-4">
-                            <div className="label">PHP</div>
-                            <div className="label">Laravel</div>
-                            <div className="label">NodeJS</div>
-                            <div className="label">ElectronJS</div>
-                        </div>
-                        <p className="relative text-pretty">
-                            Développement d'<span className="font-semibold">API </span>
-                            backend pour intranet et applications mobiles, d'
-                            <span className="font-semibold">applications de bureau </span>
-                            et de tâches automatiques d'intégration de données.
-                        </p>
-                    </Card>
-                </div>
-                <div className="flex-[1_1_28rem] motion-fade-scale">
-                    <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
-                        <h3>CMS</h3>
-                        <div className="labels">
-                            <div className="label mb-4">Wordpress</div>
-                        </div>
-                        <p className="relative text-pretty">
-                            Maintenance de sites internet et développement de plugins et thèmes sous
-                            <span className="font-semibold"> Wordpress</span>.
-                        </p>
-                    </Card>
-                </div>
-            </div>
-        </section>
+            <section className="container items-start inline-flex w-auto gap-2">
+                <nav className="menu motion-fade-down">
+                    <a className="group button" href="https://github.com/quentindion" role="button" aria-label="Github">
+                        <SiGithub className="dark:group-hover:text-[#181717] group-hover:text-neutral-50" />
+                        <span>Github</span>
+                    </a>
+                    <a className="group button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
+                        <SiYoutube className="group-hover:text-[#ff0000]" />
+                        <span>Youtube</span>
+                    </a>
+                    <a className="group button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
+                        <SiLinkedin className="group-hover:text-[#0A66C2]" />
+                        <span>LinkedIn</span>
+                    </a>
+                    <a className="group button" onClick={mailMe} role="button" aria-label="Mail">
+                        <AtSign />
+                        <span>Mail</span>
+                    </a>
+                </nav>
+                <nav className="menu motion-fade-down">
+                    <button className="relative button-icon" onClick={updateTheme} aria-label="Thème">
+                        {(theme === 'dark' && window.matchMedia('screen').matches) || (!theme && window.matchMedia('screen and (prefers-color-scheme: dark)').matches) ?
+                            <Sun /> :
+                            <Moon />}
+                    </button>
+                </nav>
+            </section>
 
-        <section className="container mt-20 md:mt-32">
-            <h2 className="motion-fade-up">Expériences</h2>
-            <Timeline items={experiences} />
-        </section>
+            <section className="container mt-20 md:mt-32 flex flex-col">
+                <div className="font-medium text-lg text-neutral-600 dark:text-neutral-400 motion-fade-up">
+                    Hello <img src={wavingHand} alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
+                </div>
+                <h1 className="mb-4 motion-fade-up drop-shadow-md dark:shadow-black">
+                    Lead Web
+                    <span className="text-gradient-primary"> Developer</span>
+                </h1>
+                <p className="font-medium text-lg max-w-screen-md text-neutral-600 dark:text-neutral-400 motion-fade-up">
+                    Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.
+                </p>
+            </section>
 
-        <section className="container mt-20 md:mt-32 z-[3] bg-neutral-50 dark:bg-neutral-900">
-            <h2 className="motion-fade-up">Formations</h2>
-            <Timeline items={training} />
-        </section>
+            <section className="container mt-20 md:mt-32">
+                <h2 className="motion-fade-up">Compétences</h2>
+                <div className="flex flex-wrap items-stretch justify-start gap-8">
+                    <div className="flex-[1_1_28rem] motion-fade-scale">
+                        <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                            <h3>Interface Web & UI</h3>
+                            <div className="labels mb-4">
+                                <div className="label">React</div>
+                                <div className="label">Angular</div>
+                                <div className="label">HTML</div>
+                                <div className="label">Sass</div>
+                                <div className="label">Tailwind</div>
+                            </div>
+                            <p className="relative text-pretty">
+                                Développement de <span className="font-semibold">PWA </span>
+                                et <span className="font-semibold">d'interfaces utilisateur </span>
+                                pour de la gestion métier (planifications, gestion de ressources internes).
+                            </p>
+                        </Card>
+                    </div>
+                    <div className="flex-[1_1_28rem] motion-fade-scale">
+                        <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                            <h3>Base de donnée & BI</h3>
+                            <div className="labels mb-4">
+                                <div className="label">Qlik Sense</div>
+                                <div className="label">Power BI</div>
+                                <div className="label">MSSQL</div>
+                                <div className="label">Postgres</div>
+                                <div className="label">MongoDB</div>
+                                <div className="label">Supabase</div>
+                            </div>
+                            <p className="relative text-pretty">
+                                Gestion de <span className="font-semibold">bases de données </span>
+                                pour des applications temps réel et agrégation de données multi-plateformes en indicateurs de gestion pour des
+                                <span className="font-semibold"> rapports BI </span>
+                                publiés aux collaborateurs.
+                            </p>
+                        </Card>
+                    </div>
+                    <div className="flex-[1_1_28rem] motion-fade-scale">
+                        <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                            <h3>Applications & API</h3>
+                            <div className="labels mb-4">
+                                <div className="label">PHP</div>
+                                <div className="label">Laravel</div>
+                                <div className="label">NodeJS</div>
+                                <div className="label">ElectronJS</div>
+                            </div>
+                            <p className="relative text-pretty">
+                                Développement d'<span className="font-semibold">API </span>
+                                backend pour intranet et applications mobiles, d'
+                                <span className="font-semibold">applications de bureau </span>
+                                et de tâches automatiques d'intégration de données.
+                            </p>
+                        </Card>
+                    </div>
+                    <div className="flex-[1_1_28rem] motion-fade-scale">
+                        <Card className="h-full" mouseX={mouseX} mouseY={mouseY}>
+                            <h3>CMS</h3>
+                            <div className="labels">
+                                <div className="label mb-4">Wordpress</div>
+                            </div>
+                            <p className="relative text-pretty">
+                                Maintenance de sites internet et développement de plugins et thèmes sous
+                                <span className="font-semibold"> Wordpress</span>.
+                            </p>
+                        </Card>
+                    </div>
+                </div>
+            </section>
 
-        <section className="relative bg-neutral-800 z-[2]">
+            <section className="container mt-20 md:mt-32">
+                <h2 className="motion-fade-up">Expériences</h2>
+                <Timeline items={experiences} />
+            </section>
+
+            <section className="flex flex-col mt-20 md:mt-32">
+                <div className="container">
+                    <h2 className="motion-fade-up">Formations</h2>
+                    <Timeline items={training} />
+                </div>
+            </section>
+        </article>
+
+        <section className="relative bg-neutral-800 z-[2]" style={{marginBottom: footerHeight}}>
             <div className="h-8 bg-neutral-50 dark:bg-neutral-900 rounded-b-xl shadow-lg  shadow-black"></div>
         </section>
 
-        <section className="relative flex flex-col flex-wrap bg-neutral-800 text-white z-[1]">
-            <div className="container mt-16 mb-20 md:mb32 flex flex-wrap items-stretch justify-center gap-4">
+        <footer ref={footerSizeRef} className="fixed w-full bottom-0 flex flex-col flex-wrap bg-neutral-800 text-white z-[1]">
+            <div className="container py-16 flex flex-wrap items-stretch justify-center gap-4">
                 <div className="flex flex-col gap-4 flex-auto">
                     <Code content={{
                         about: {
@@ -284,7 +300,7 @@ export default function App () {
                 </div>
                 <Code className="flex-auto" content={{changelog}} />
             </div>
-        </section>
+        </footer>
     </>
 }
 
@@ -364,7 +380,7 @@ const Timeline = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'> & {i
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Code = forwardRef<HTMLPreElement, Omit<ComponentPropsWithoutRef<'pre'>, 'content'> & {content: unknown}>(({className, content}, ref) => {
     
-    const parse = (content: unknown, prop?: string, indent: number = -1): JSX.Element => {
+    const parse = (content: unknown, prop?: string, indent = -1, isLast = true): JSX.Element => {
 
         const isObject = (item: unknown): item is object => Object.prototype.toString.call(item) === "[object Object]";
         const isArray = (item: unknown): item is Array<unknown> => Array.isArray(item);
@@ -373,8 +389,8 @@ const Code = forwardRef<HTMLPreElement, Omit<ComponentPropsWithoutRef<'pre'>, 'c
 
         const padLeft = indent > 0 ? '    '.repeat(indent - 1) : '';
 
-        return <>
-            {indent === 0 ? <>
+        if(indent === 0)
+            return <>
                 <code>
                     <span className="text-cyan-400">const </span> 
                     <span className="text-blue-400">{prop}</span>
@@ -396,25 +412,29 @@ const Code = forwardRef<HTMLPreElement, Omit<ComponentPropsWithoutRef<'pre'>, 'c
                 <code>
                     {isObject(content) ? '}' : isArray(content) ? ']' : ''}
                 </code>
-            </> :
-            isObject(content) ? <>
+            </>
+        else if(isObject(content)) {
+            const items = Object.entries(content);
+            return <>
                 {indent > 1 && <code>{padLeft}{prop && <><span className="text-cyan-400">{prop}</span>: </>}{'{'}</code>}
-                {Object.entries(content).map(([prop, item]) => <Fragment key={prop}>{parse(item, prop, indent + 1)}</Fragment>)}
-                {indent > 1 && <code>{padLeft}{'}'}</code>}
-            </> :
-            isArray(content) ? <>
+                {items.map(([prop, item], i) => <Fragment key={i}>{parse(item, prop, indent + 1, i === items.length - 1)}</Fragment>)}
+                {indent > 1 && <code>{padLeft}{'}'}{!isLast && ','}</code>}
+            </>
+        } else if(isArray(content))
+            return <>
                 {indent > 1 && <code>{padLeft}{prop && <><span className="text-cyan-400">{prop}</span>: </>}{'['}</code>}
-                {content.map((item, i) => <Fragment key={i}>{parse(item, undefined, indent + 1)}</Fragment>)}
-                {indent > 1 && <code>{padLeft}{']'}</code>}
-            </> :
-            <code>
+                {content.map((item, i) => <Fragment key={i}>{parse(item, undefined, indent + 1, i === content.length - 1)}</Fragment>)}
+                {indent > 1 && <code>{padLeft}{']'}{!isLast && ','}</code>}
+            </>
+        else
+            return <code>
                 {padLeft}
                 {prop && <><span className="text-cyan-400">{prop}</span>: </>}
                 {isNumeric(content) ? <span className="text-purple-400">{content}</span> : 
                 isLink(content) ? <span className="text-red-400"><a href={content}>{content}</a> <SquareArrowOutUpRight className="inline-block size-3" /></span> :
                 <><span className="text-yellow-400">"{content as string}"</span></>}
-            </code>}
-        </>;
+                {!isLast && ','}
+            </code>;
     }
     
     return <pre ref={ref} className={cn("code", className)}>{parse(content)}</pre>;
