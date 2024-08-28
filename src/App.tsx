@@ -79,9 +79,9 @@ export default function App () {
 
     const updateTheme = () => {
 
-        if(theme === null && window.matchMedia('prefers-color-scheme: dark').matches)
+        if(theme === null && window.matchMedia('screen and (prefers-color-scheme: dark)').matches)
             setTheme('light');
-        else if(theme === null && !window.matchMedia('prefers-color-scheme: dark').matches)
+        else if(theme === null && !window.matchMedia('screen and (prefers-color-scheme: dark)').matches)
             setTheme('dark');
         else
             removeTheme();
