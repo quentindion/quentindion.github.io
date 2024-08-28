@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, forwardRef, Fragment, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { ComponentPropsWithoutRef, forwardRef, Fragment, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { LucideIcon, Sun, Moon, AtSign, SquareArrowOutUpRight } from 'lucide-react';
 import { SiGithub, SiLinkedin, SiYoutube } from '@icons-pack/react-simple-icons';
 import wavingHand from '../src/assets/Waving Hand.webp'
@@ -127,14 +127,6 @@ export default function App () {
             .then(setChangelog);
 
     }, []);
-
-    const [footerHeight, setFooterHeight] = useState(0);
-
-    const footerSizeRef = useCallback((node: HTMLElement) => {
-        if(node)
-            setFooterHeight(node.getBoundingClientRect().height);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [changelog]);
 
     return <>
         {/* <BackgroundBeams /> */}
@@ -272,11 +264,13 @@ export default function App () {
             </section>
         </article>
 
-        <section className="relative bg-neutral-800 z-[2]" style={{marginBottom: footerHeight}}>
-            <div className="h-8 bg-neutral-50 dark:bg-neutral-900 rounded-b-xl shadow-lg  shadow-black"></div>
+        <section className="sticky top-0 bg-neutral-800 z-[2]">
+            <div className="flex items-center justify-center h-8 bg-neutral-50 dark:bg-neutral-900 rounded-b-xl shadow-xl shadow-black">
+                <div className="w-16 h-1 rounded-md bg-neutral-200 dark:bg-neutral-700 md:hidden"></div>
+            </div>
         </section>
 
-        <footer ref={footerSizeRef} className="fixed w-full bottom-0 flex flex-col flex-wrap bg-neutral-800 text-white z-[1]">
+        <footer className="flex flex-col flex-wrap bg-neutral-800 text-white z-[1]">
             <div className="container py-16 flex flex-wrap items-stretch justify-center gap-4">
                 <div className="flex flex-col gap-4 flex-auto">
                     <Code content={{
