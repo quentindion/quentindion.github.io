@@ -40,21 +40,14 @@
     }
 
     button, .button {
-        @apply relative text-sm font-bold inline-flex gap-2 items-center cursor-pointer rounded-3xl no-underline transition-all
-            before:content-[''] before:absolute before:inset-0 before:top-0 before:left-0 before:rounded-3xl
-            before:scale-125 before:bg-transparent before:transition-all
-            hover:before:scale-100 hover:before:bg-neutral-900 hover:text-white
-            dark:hover:before:bg-white dark:hover:text-black
-            active:before:scale-90
-            *:relative;
-
-        &:not(.button-icon) {
-            @apply px-3 py-1.5;
-        } 
+        @apply relative text-sm font-bold inline-flex px-3 py-1.5 gap-2 items-center cursor-pointer rounded-3xl no-underline transition-all
+            hover:text-white hover:dark:text-black
+            active:scale-90
+            *:transition-colors;
     }
-
+        
     .button-icon {
-        @apply button h-9 w-9 rounded-full before:rounded-full items-center justify-center;
+        @apply button size-9 p-0 rounded-full items-center justify-center;
     }
 
     .card {
@@ -77,18 +70,6 @@
 
     .labels { @apply flex flex-wrap gap-2; }
     .label { @apply text-sm font-semibold tracking-tight px-1.5 rounded-md bg-neutral-700 text-white; }
-
-    pre.code {
-        @apply flex flex-col text-xs whitespace-pre-wrap;
-
-        &::before { counter-reset: listing; }
-        
-        > code { counter-increment: listing; }
-        > code::before {
-            @apply inline-block w-8 text-right opacity-50;
-            content: counter(listing)" ";
-        }
-    }
 }
 
 @layer utilities {

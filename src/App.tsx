@@ -1,12 +1,11 @@
-import { ComponentPropsWithoutRef, forwardRef, Fragment, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { LucideIcon, Sun, Moon, AtSign, SquareArrowOutUpRight } from 'lucide-react';
+import { ComponentPropsWithoutRef, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { LucideIcon, Sun, Moon, AtSign } from 'lucide-react';
 import { SiGithub, SiLinkedin, SiYoutube } from '@icons-pack/react-simple-icons';
 import wavingHand from '../src/assets/Waving Hand.webp'
 import { cn } from './utils';
 import { useLocalStorage } from 'usehooks-ts';
 import useAnimateInView from './useAnimateInView';
-import { animate, motion, MotionValue, useMotionValue, useScroll, useTransform } from 'framer-motion';
-import { version } from '../package.json';
+import { animate, AnimatePresence, motion, MotionValue, useMotionValue, useScroll, useTransform } from 'framer-motion';
 
 declare global {
     function applyTheme(): void
@@ -76,9 +75,8 @@ export default function App () {
     };
 
     const [theme, setTheme, removeTheme] = useLocalStorage<Theme>('theme', null);
-
+    
     const updateTheme = () => {
-
         if(theme === null && window.matchMedia('screen and (prefers-color-scheme: dark)').matches)
             setTheme('light');
         else if(theme === null && !window.matchMedia('screen and (prefers-color-scheme: dark)').matches)
@@ -88,6 +86,8 @@ export default function App () {
 
         window.applyTheme();
     };
+
+    const [activeMenu, setActiveMenu] = useState<number>();
 
     useAnimateInView('.motion-fade', {initial: {opacity: 0}, animate: {opacity: 1}});
     useAnimateInView('.motion-fade-up', {initial: {opacity: 0, y: 25}, animate: {opacity: 1, y: 0}});
@@ -114,24 +114,8 @@ export default function App () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [changelog, setChangelog] = useState<unknown[]>([]);
-
-    useEffect(() => {
-
-        fetch('changelog.json')
-            .then(response => response.json() as Promise<{commits: {oid: string, message: string, author: {date: string}}[]}>)
-            .then(response => response.commits.map(({message, author: {date}}) => {
-                const lines = message.split('\n');
-                return ({message: lines.length > 1 ? lines : message, date});
-            }))
-            .then(setChangelog);
-
-    }, []);
-
     return <>
-        {/* <BackgroundBeams /> */}
         <article className="relative flex flex-col z-[3] bg-neutral-50 dark:bg-neutral-900">
-
             <div className="relative">
                 <div className="absolute h-screen w-full bg-[radial-gradient(#71717a40_1px,transparent_1px)] [background-size:16px_16px] 
                     [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
@@ -139,31 +123,47 @@ export default function App () {
             
             <section className="h-12"></section>
 
-            <section className="container items-start inline-flex w-auto gap-2">
+            <section className="container items-start inline-flex w-auto gap-2" onMouseLeave={() => setActiveMenu(undefined)}>
                 <nav className="menu motion-fade-down">
-                    <a className="group button" href="https://github.com/quentindion" role="button" aria-label="Github">
-                        <SiGithub className="dark:group-hover:text-[#181717] group-hover:text-neutral-50" />
-                        <span>Github</span>
-                    </a>
-                    <a className="group button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
-                        <SiYoutube className="group-hover:text-[#ff0000]" />
-                        <span>Youtube</span>
-                    </a>
-                    <a className="group button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
-                        <SiLinkedin className="group-hover:text-[#0A66C2]" />
-                        <span>LinkedIn</span>
-                    </a>
-                    <a className="group button" onClick={mailMe} role="button" aria-label="Mail">
-                        <AtSign />
-                        <span>Mail</span>
-                    </a>
+                    <motion.a className="relative group button" href="https://github.com/quentindion" role="button" aria-label="Github"
+                        onHoverStart={() => setActiveMenu(0)}>
+                        <AnimatePresence>{activeMenu === 0 && <MenuHighlight />}</AnimatePresence>
+                        <div className="relative inline-flex gap-2 items-center">
+                            <SiGithub className="dark:group-hover:text-[#181717] group-hover:text-neutral-50" /> Github
+                        </div>
+                    </motion.a>
+                    <motion.a className="relative group button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube"
+                        onHoverStart={() => setActiveMenu(1)}>
+                        <AnimatePresence>{activeMenu === 1 && <MenuHighlight />}</AnimatePresence>
+                        <div className="relative inline-flex gap-2 items-center">
+                            <SiYoutube className="group-hover:text-[#ff0000]" /> Youtube
+                        </div>
+                    </motion.a>
+                    <motion.a className="relative group button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn"
+                        onHoverStart={() => setActiveMenu(2)}>
+                        <AnimatePresence>{activeMenu === 2 && <MenuHighlight />}</AnimatePresence>
+                        <div className="relative inline-flex gap-2 items-center">
+                            <SiLinkedin className="group-hover:text-[#0A66C2]" /> LinkedIn
+                        </div>
+                    </motion.a>
+                    <motion.a className="relative button" onClick={mailMe} role="button" aria-label="Mail"
+                        onHoverStart={() => setActiveMenu(3)}>
+                        <AnimatePresence>{activeMenu === 3 && <MenuHighlight />}</AnimatePresence>
+                        <div className="relative inline-flex gap-2 items-center">
+                            <AtSign /> Mail
+                        </div>
+                    </motion.a>
                 </nav>
                 <nav className="menu motion-fade-down">
-                    <button className="relative button-icon" onClick={updateTheme} aria-label="Thème">
-                        {(theme === 'dark' && window.matchMedia('screen').matches) || (!theme && window.matchMedia('screen and (prefers-color-scheme: dark)').matches) ?
-                            <Sun /> :
-                            <Moon />}
-                    </button>
+                    <motion.button className="relative button-icon" onClick={updateTheme} aria-label="Thème"
+                        onHoverStart={() => setActiveMenu(4)}>
+                        <AnimatePresence>{activeMenu === 4 && <MenuHighlight />}</AnimatePresence>
+                        <div className="relative inline-flex gap-2 items-center">
+                            {(theme === 'dark' && window.matchMedia('screen').matches) || (!theme && window.matchMedia('screen and (prefers-color-scheme: dark)').matches) ?
+                                <Sun /> :
+                                <Moon />}
+                        </div>
+                    </motion.button>
                 </nav>
             </section>
 
@@ -264,41 +264,14 @@ export default function App () {
             </section>
         </article>
 
-        <section className="sticky top-0 bg-neutral-800 z-[2]">
-            <div className="flex items-center justify-center h-8 bg-neutral-50 dark:bg-neutral-900 rounded-b-xl shadow-xl shadow-black">
-                <div className="w-16 h-1 rounded-md bg-neutral-200 dark:bg-neutral-700 md:hidden"></div>
-            </div>
-        </section>
-
-        <footer className="flex flex-col flex-wrap bg-neutral-800 text-white z-[1]">
-            <div className="container py-16 flex flex-wrap items-stretch justify-center gap-4">
-                <div className="flex flex-col gap-4 flex-auto">
-                    <Code content={{
-                        about: {
-                            version,
-                            social: {
-                                github: "https://github.com/quentindion",
-                                youtube: "https://www.youtube.com/@vs2kf",
-                                linkedin: "https://www.linkedin.com/in/quentindion"
-                            }
-                        }
-                    }} />
-                    <Code content={{
-                        resources: [
-                            "https://vitejs.dev",
-                            "https://tailwindcss.com",
-                            "https://www.framer.com/motion",
-                            "https://lucide.dev"
-                        ]
-                    }}/>
-                </div>
-                <Code className="flex-auto" content={{changelog}} />
-            </div>
-        </footer>
+        <section className="h-36"></section>
     </>
 }
 
-const Card = motion(forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'> & {mouseX: MotionValue<number>, mouseY: MotionValue<number>}>(
+const MenuHighlight = () => <motion.div layoutId="active-menu" initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} 
+    className="absolute top-0 left-0 inset-0 bg-black dark:bg-white" style={{ borderRadius: 18 }} />
+
+const Card = motion.create(forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'> & {mouseX: MotionValue<number>, mouseY: MotionValue<number>}>(
     ({children, className, mouseX, mouseY}, forwardedRef) => {
 
         const ref = useRef<HTMLDivElement>(null);
@@ -370,66 +343,3 @@ const Timeline = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'> & {i
         </div>
     }
 );
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Code = forwardRef<HTMLPreElement, Omit<ComponentPropsWithoutRef<'pre'>, 'content'> & {content: unknown}>(({className, content}, ref) => {
-    
-    const parse = (content: unknown, prop?: string, indent = -1, isLast = true): JSX.Element => {
-
-        const isObject = (item: unknown): item is object => Object.prototype.toString.call(item) === "[object Object]";
-        const isArray = (item: unknown): item is Array<unknown> => Array.isArray(item);
-        const isNumeric = (item: unknown): item is string => /^[\d.]+$/i.test(item as string);
-        const isLink = (item: unknown): item is string => /^(https?:\/\/)?([\da-z.-]+)\.([a-z]{2,6})([/\w.-]*)*\/?/i.test(item as string);
-
-        const padLeft = indent > 0 ? '    '.repeat(indent - 1) : '';
-
-        if(indent === 0)
-            return <>
-                <code>
-                    <span className="text-cyan-400">const </span> 
-                    <span className="text-blue-400">{prop}</span>
-                    <span className="text-red-400">: </span>
-                    <span className="text-blue-400 capitalize">
-                        {isObject(content) ? prop : 
-                        isArray(content) ? <>
-                            Array
-                            <span className="text-purple-400">{'<'}</span>
-                            {typeof content[0]}
-                            <span className="text-purple-400">{'>'}</span>
-                        </> : 
-                        typeof content}
-                    </span>
-                    <span className="text-red-400"> = </span>
-                    {isObject(content) ? '{' : isArray(content) ? '[' : ''}
-                </code>
-                {parse(content, undefined, indent + 1)}
-                <code>
-                    {isObject(content) ? '}' : isArray(content) ? ']' : ''}
-                </code>
-            </>
-        else if(isObject(content)) {
-            const items = Object.entries(content);
-            return <>
-                {indent > 1 && <code>{padLeft}{prop && <><span className="text-cyan-400">{prop}</span>: </>}{'{'}</code>}
-                {items.map(([prop, item], i) => <Fragment key={i}>{parse(item, prop, indent + 1, i === items.length - 1)}</Fragment>)}
-                {indent > 1 && <code>{padLeft}{'}'}{!isLast && ','}</code>}
-            </>
-        } else if(isArray(content))
-            return <>
-                {indent > 1 && <code>{padLeft}{prop && <><span className="text-cyan-400">{prop}</span>: </>}{'['}</code>}
-                {content.map((item, i) => <Fragment key={i}>{parse(item, undefined, indent + 1, i === content.length - 1)}</Fragment>)}
-                {indent > 1 && <code>{padLeft}{']'}{!isLast && ','}</code>}
-            </>
-        else
-            return <code>
-                {padLeft}
-                {prop && <><span className="text-cyan-400">{prop}</span>: </>}
-                {isNumeric(content) ? <span className="text-purple-400">{content}</span> : 
-                isLink(content) ? <span className="text-red-400"><a href={content}>{content}</a> <SquareArrowOutUpRight className="inline-block size-3" /></span> :
-                <><span className="text-yellow-400">"{content as string}"</span></>}
-                {!isLast && ','}
-            </code>;
-    }
-    
-    return <pre ref={ref} className={cn("code", className)}>{parse(content)}</pre>;
-});
