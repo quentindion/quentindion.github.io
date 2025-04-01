@@ -1,4 +1,4 @@
-import { HTMLProps, useEffect, useImperativeHandle, useRef } from 'react';
+import { HTMLProps, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { LucideIcon, SunIcon, MoonIcon, AtSignIcon } from 'lucide-react';
 import wavingHand from '../src/assets/Waving Hand.webp'
 import { cn } from './utils';
@@ -32,9 +32,9 @@ export type Experience = {
 
 export default function App () {
 
-    const seniority: number = (new Date).getFullYear() - 2013;
+    const seniority: number = useMemo(() => (new Date).getFullYear() - 2013, []);
 
-    const experiences: Experience[] = [
+    const experiences: Experience[] = useMemo(() => [
         {
             title: "Lead développeur web",
             company: "Oxance",
@@ -56,9 +56,9 @@ export default function App () {
             dates: ["2011"],
             description: "Création de site web sous Joomla (développement, design, contenu, traduction), principalement pour des communes. Formation et création de documentation technique."
         }
-    ];
+    ], []);
 
-    const training: Experience[] = [
+    const training: Experience[] = useMemo(() => [
         {
             title: "Licence Pro SIL",
             description: "Métiers de l'internet et des applications multimédia",
@@ -68,11 +68,11 @@ export default function App () {
             description: "Informatique et réseau pour l'industrie et les services",
             dates: ["2012"]
         }
-    ];
+    ], []);
 
-    const mailMe = () => {
+    const mailMe = useMemo(() => () => {
         location.href = "mailto:" + ["contact@quentindion", "me"].join(".");
-    };
+    }, []);
 
     const [theme, toggleTheme] = useTheme();
 
