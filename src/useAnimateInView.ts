@@ -2,35 +2,52 @@ import { useEffect } from 'react';
 import { DOMKeyframesDefinition, animate } from 'framer-motion';
 
 export default function useAnimateInView(
-    selector: string,
-    variants: {
-        initial?: DOMKeyframesDefinition,
-        animate?: DOMKeyframesDefinition,
+    variants: Record<string, {
+        initial: DOMKeyframesDefinition,
+        animate: DOMKeyframesDefinition,
         exit?: DOMKeyframesDefinition
-    } = {}
+    }>
 ){
     useEffect(() => {
-        
-        const elements = Array.from(document.body.querySelectorAll(selector) as NodeListOf<HTMLElement>)
-                              .filter(e => !e.classList.contains('motion-in-view-animated'));
 
-        if(variants.initial && elements.length > 0) {
-            animate(Array.from(elements).map(e => [e, variants.initial as DOMKeyframesDefinition, {at: 0, duration: 0}]));
-            elements.forEach(e => e.style.visibility = 'visible');
-        }
-        
-        const observer = new IntersectionObserver(entries => {
+        const vw = window.innerWidth || document.documentElement.clientWidth;
+        const vh = window.innerHeight || document.documentElement.clientHeight;
 
-            const visibles = entries.filter(({isIntersecting}) => isIntersecting).map(({target}) => target);
+        const findElements = () =>
+            Object.keys(variants)
+                .map(selector => Array.from(document.body.querySelectorAll<HTMLElement>(`${selector}:not(.in-view)`)).map(element => ({selector, element})))
+                .flat()
+                .sort((a, b) => (a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1);
 
-            if(visibles.length > 0 && variants.animate) {
-                visibles.forEach(e => e.classList.add('motion-in-view-animated'));
-                animate(visibles.map(e => [e, variants.animate as DOMKeyframesDefinition, {type: 'spring', duration: 0.75, at: '-0.7'}]));
+        const onScroll = () => {
+            
+            const elements = findElements();
+
+            const visibles = elements.filter(({element}) => {
+                const {top, left, bottom, right} = element.getBoundingClientRect();
+                return (top >= 0) && (left >= 0) && (bottom <= vh) && (right <= vw);
+            });
+
+            if(visibles.length > 0) {
+                visibles.forEach(({element}) => element.classList.add("in-view"));
+                animate(visibles.map(({element, selector}) => [element, variants[selector].animate, {type: "spring", duration: 0.75, at: "-0.7"}]));
             }
-        });
 
-        elements.forEach(e => observer.observe(e));
+            if(elements.length === 0)
+                document.removeEventListener("scroll", onScroll, false);
+        }
 
-        return () => { elements.forEach(e => observer.unobserve(e)); }
-    }, [selector, variants]);
+        const elements = findElements();
+
+        if(elements.length > 0) {
+            animate(elements.map(({element, selector}) => [element, variants[selector].initial, {at: 0, duration: 0}]));
+            elements.forEach(({element}) => element.style.visibility = "visible");
+        }
+
+        onScroll();
+
+        document.addEventListener("scroll", onScroll, {passive: true});
+
+        return () => { document.removeEventListener("scroll", onScroll, false); }
+    }, [variants]);
 }

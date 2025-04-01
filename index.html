@@ -10,18 +10,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
     <script>
         window.applyTheme = () => {
-            const theme = localStorage.getItem('theme');
-            if((window.matchMedia('screen').matches && theme && JSON.parse(theme) === 'dark') || 
-                (!theme && window.matchMedia('screen and (prefers-color-scheme: dark)').matches))
-                document.documentElement.classList.add('dark');
-            else
-                document.documentElement.classList.remove('dark');
+            document.documentElement.classList.toggle("dark",
+                localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            );
         };
         applyTheme();
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
     </script>
   </head>
   <body>
