@@ -9,8 +9,8 @@
     <meta name="description" content="Lead Web Developer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <script>
-        window.isDarkMode = () => (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches))
-        window.applyTheme = () => document.documentElement.classList.toggle("dark", window.isDarkMode())
+        window.isDark=()=>(localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches))
+        window.applyTheme=()=>document.documentElement.classList.toggle("dark", window.isDark())
         window.applyTheme();
         window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", window.applyTheme);
     </script>

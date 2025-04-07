@@ -10,7 +10,7 @@ import YoutubeIcon from "./assets/youtube-FF0000.svg?react";
 import useTheme from './useTheme';
 
 declare global {
-    function isDarkMode(): boolean
+    function isDark(): boolean
     function applyTheme(): void
 }
 
