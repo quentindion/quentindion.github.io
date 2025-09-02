@@ -145,21 +145,29 @@ export default function App () {
                 <section className="h-12"></section>
                 <div className="flex flex-row items-start justify-between mx-2 md:mx-8">
                     <nav className="flex flex-wrap gap-2 justify-start">
-                        <a className="button" href="https://github.com/quentindion" role="button" aria-label="Github">
-                            <GithubIcon className="size-6 fill-current github-icon transition-colors" /> Github
-                        </a>
-                        <a className="button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
-                            <YoutubeIcon className="size-6 fill-current youtube-icon transition-colors" /> Youtube
-                        </a>
-                        <a className="button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
-                            <LinkedinIcon className="size-6 fill-current linkedin-icon transition-colors" /> LinkedIn
-                        </a>
-                        <a className="button" onClick={() => document.getElementById("contact")?.scrollIntoView({behavior: "smooth"})} 
-                            role="button" aria-label="Mail">
-                            <AtSignIcon className="transition-colors" /> Contact
-                        </a>
+                        <div className="motion-fade-up">
+                            <a className="button" href="https://github.com/quentindion" role="button" aria-label="Github">
+                                <GithubIcon className="size-6 fill-current github-icon transition-colors" /> Github
+                            </a>
+                        </div>
+                        <div className="motion-fade-up">
+                            <a className="button" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
+                                <YoutubeIcon className="size-6 fill-current youtube-icon transition-colors" /> Youtube
+                            </a>
+                        </div>
+                        <div className="motion-fade-up">
+                            <a className="button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
+                                <LinkedinIcon className="size-6 fill-current linkedin-icon transition-colors" /> LinkedIn
+                            </a>
+                        </div>
+                        <div className="motion-fade-up">
+                            <a className="button" onClick={() => document.getElementById("contact")?.scrollIntoView({behavior: "smooth"})} 
+                                role="button" aria-label="Mail">
+                                <AtSignIcon className="transition-colors" /> Contact
+                            </a>
+                        </div>
                     </nav>
-                    <div>
+                    <div className="motion-fade-up">
                         <button className="relative button-icon" onClick={toggleTheme} aria-label="Thème">
                             <div className="relative inline-flex gap-2 items-center">
                                 <ThemeIcon />
@@ -187,8 +195,8 @@ export default function App () {
 
                 <section className="relative mt-20 md:mt-32">
                     <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
-                    <h2 className="pt-2 px-2 motion-fade">Mes outlis</h2>
-                    <InfiniteLooper className="mb-4 motion-fade-left" duration={10} direction="left">
+                    <h2 className="pt-2 px-2 motion-fade-up">Mes outlis</h2>
+                    <InfiniteLooper className="mb-4 motion-fade-up" duration={10} direction="left">
                         {tech.map(({Icon, className, name}) => <div key={name} className="flex gap-2 items-center w-max text-2xl font-bold">
                             <Icon className={cn("size-12", className)} /> {name}
                         </div>)}
@@ -286,7 +294,7 @@ export default function App () {
                 <section id="contact" className="relative mt-20 md:mt-32 px-2">
                     <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
                     <h2 className="pt-2 motion-fade-up">Contact</h2>
-                    <a className="motion-fade cursor-pointer" onClick={copyContact}>contact@quentindion.me</a>
+                    <a className="motion-fade cursor-pointer select-none" onClick={copyContact}>contact@quentindion.me</a>
                     <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
                 </section>
 
