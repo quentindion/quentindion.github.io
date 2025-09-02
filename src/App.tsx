@@ -131,7 +131,7 @@ export default function App () {
 
         await copy("contact@quentindion.me");
         
-        toast.success("Copié dans le presse-papiers.", {id: "copy-contact"});
+        toast.success("Copié dans le presse-papiers.", {id: "copy-contact", dismissible: true});
     }
 
     return <>
@@ -303,7 +303,7 @@ export default function App () {
 
             <div className="min-w-4 md:min-w-8 bg-dashed border-x dark:border-white/10 border-black/5" />
         </article>
-        <Toaster position="bottom-center" toastOptions={{
+        <Toaster position="bottom-center" swipeDirections={["bottom", "left", "right"]} toastOptions={{
             unstyled: true,
             classNames: {
                 toast: "flex flex-shrink-0 gap-4 w-fit overflow-hidden p-6 rounded-full transition-all transform-gpu \
