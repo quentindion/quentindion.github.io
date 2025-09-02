@@ -30,7 +30,7 @@ export default function useAnimateInView(
 
             if(visibles.length > 0) {
                 visibles.forEach(({element}) => element.classList.add("in-view"));
-                animate(visibles.map(({element, selector}) => [element, variants[selector].animate, {type: "spring", duration: 0.75, at: "-0.7"}]));
+                animate(visibles.map(({element, selector}) => [element, variants[selector].animate, {type: "spring", duration: 0.75, at: "-0.70"}]));
             }
 
             if(elements.length === 0)
@@ -44,7 +44,7 @@ export default function useAnimateInView(
             elements.forEach(({element}) => element.style.visibility = "visible");
         }
 
-        onScroll();
+        requestAnimationFrame(() => onScroll());
 
         document.addEventListener("scroll", onScroll, {passive: true});
 

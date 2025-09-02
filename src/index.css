@@ -1,3 +1,5 @@
+@import "https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/around.min.css";
+
 @import 'tailwindcss';
 
 @font-face {
@@ -36,6 +38,13 @@
     --color-accent-950: var(--color-lime-950);
 
     --pattern-fg: color-mix(in oklab, var(--color-black) 5%, transparent);
+
+    --animate-looper: looper linear infinite;
+
+    @keyframes looper {
+        from {transform: translateX(0);}
+        to {transform: translateX(calc(var(--looper-loops) * 100% * -1));}
+    }
 }
 
 @utility container {

@@ -1,5 +1,5 @@
 import { HTMLProps, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
-import { LucideIcon, SunIcon, MoonIcon, AtSignIcon } from 'lucide-react';
+import { LucideIcon, AtSignIcon, CircleCheckIcon, CircleXIcon } from 'lucide-react';
 import wavingHand from '../src/assets/Waving Hand.webp'
 import { cn } from './utils';
 import useAnimateInView from './useAnimateInView';
@@ -8,6 +8,19 @@ import GithubIcon from "./assets/github-181717.svg?react";
 import LinkedinIcon from "./assets/linkedin-0A66C2.svg?react";
 import YoutubeIcon from "./assets/youtube-FF0000.svg?react";
 import useTheme from './useTheme';
+import { useCopyToClipboard } from 'usehooks-ts';
+import { toast, Toaster } from 'sonner';
+import ThemeIcon from './components/ThemeIcon';
+import DockerIcon from "./assets/docker-2496ED.svg?react";
+import CaddyIcon from "./assets/caddy-1F88C0.svg?react";
+import GitIcon from "./assets/git-F05032.svg?react";
+import LaravelIcon from "./assets/laravel-FF2D20.svg?react";
+import NodeJSIcon from "./assets/nodedotjs-5FA04E.svg?react";
+import ViteIcon from "./assets/vite-646CFF.svg?react";
+import TSIcon from "./assets/typescript-3178C6.svg?react";
+import ReactIcon from "./assets/react-61DAFB.svg?react";
+import TailwindCssIcon from "./assets/tailwindcss-06B6D4.svg?react";
+import InfiniteLooper from './components/InfiniteLooper';
 
 declare global {
     function isDark(): boolean
@@ -71,11 +84,19 @@ export default function App () {
         }
     ], []);
 
-    const mailMe = useMemo(() => () => {
-        location.href = "mailto:" + ["contact@quentindion", "me"].join(".");
-    }, []);
+    const tech = useMemo(() => [
+        {Icon: DockerIcon,      className: "fill-[#2496ED]", name: "Docker"},
+        {Icon: CaddyIcon,       className: "fill-[#1F88C0]", name: "Caddy"},
+        {Icon: GitIcon,         className: "fill-[#F05032]", name: "Git"},
+        {Icon: LaravelIcon,     className: "fill-[#FF2D20]", name: "Laravel"},
+        {Icon: NodeJSIcon,      className: "fill-[#5FA04E]", name: "Node JS"},
+        {Icon: ViteIcon,        className: "fill-[#646CFF]", name: "Vite"},
+        {Icon: TSIcon,          className: "fill-[#3178C6]", name: "Typescript"},
+        {Icon: ReactIcon,       className: "fill-[#61DAFB]", name: "React"},
+        {Icon: TailwindCssIcon, className: "fill-[#06B6D4]", name: "Tailwind CSS"}
+    ], []);
 
-    const [theme, toggleTheme] = useTheme();
+    const [, toggleTheme] = useTheme();
 
     useAnimateInView({
         ".motion-fade": {initial: {opacity: 0}, animate: {opacity: 1}},
@@ -104,6 +125,15 @@ export default function App () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [, copy] = useCopyToClipboard();
+
+    const copyContact = async () => {
+
+        await copy("contact@quentindion.me");
+        
+        toast.success("Copié dans le presse-papiers.", {id: "copy-contact"});
+    }
+
     return <>
         <div className="relative">
             <div className="absolute h-screen w-full bg-[radial-gradient(#71717a40_1px,transparent_1px)] [background-size:16px_16px] 
@@ -124,16 +154,15 @@ export default function App () {
                         <a className="button" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
                             <LinkedinIcon className="size-6 fill-current linkedin-icon transition-colors" /> LinkedIn
                         </a>
-                        <a className="button" onClick={mailMe} role="button" aria-label="Mail">
-                            <AtSignIcon className="transition-colors" /> Mail
+                        <a className="button" onClick={() => document.getElementById("contact")?.scrollIntoView({behavior: "smooth"})} 
+                            role="button" aria-label="Mail">
+                            <AtSignIcon className="transition-colors" /> Contact
                         </a>
                     </nav>
                     <div>
                         <button className="relative button-icon" onClick={toggleTheme} aria-label="Thème">
                             <div className="relative inline-flex gap-2 items-center">
-                                {(theme === "dark" && window.matchMedia("screen").matches) || (!theme && window.matchMedia("screen and (prefers-color-scheme: dark)").matches) ?
-                                    <SunIcon /> :
-                                    <MoonIcon />}
+                                <ThemeIcon />
                             </div>
                         </button>
                     </div>
@@ -153,6 +182,17 @@ export default function App () {
                     <p className="font-medium text-lg max-w-(--breakpoint-md) text-neutral-600 dark:text-neutral-400 motion-fade-up">
                         Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.
                     </p>
+                    <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
+                </section>
+
+                <section className="relative mt-20 md:mt-32">
+                    <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
+                    <h2 className="pt-2 px-2 motion-fade">Mes outlis</h2>
+                    <InfiniteLooper className="mb-4 motion-fade-left" duration={10} direction="left">
+                        {tech.map(({Icon, className, name}) => <div key={name} className="flex gap-2 items-center w-max text-2xl font-bold">
+                            <Icon className={cn("size-12", className)} /> {name}
+                        </div>)}
+                    </InfiniteLooper>
                     <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
                 </section>
 
@@ -243,11 +283,33 @@ export default function App () {
                     <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
                 </section>
 
+                <section id="contact" className="relative mt-20 md:mt-32 px-2">
+                    <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
+                    <h2 className="pt-2 motion-fade-up">Contact</h2>
+                    <a className="motion-fade cursor-pointer" onClick={copyContact}>contact@quentindion.me</a>
+                    <div className="absolute -left-[100vw] w-[200vw] border-b dark:border-white/10 border-black/5" />
+                </section>
+
                 <section className="h-36"></section>
             </div>
 
             <div className="min-w-4 md:min-w-8 bg-dashed border-x dark:border-white/10 border-black/5" />
         </article>
+        <Toaster position="bottom-center" toastOptions={{
+            unstyled: true,
+            classNames: {
+                toast: "flex flex-shrink-0 gap-4 w-fit overflow-hidden p-6 rounded-full transition-all transform-gpu \
+                    shadow shadow-2xl bg-neutral-950 dark:bg-neutral-50",
+                content: "flex-1 flex flex-col justify-center",
+                title: "font-semibold",
+                icon: "size-6",
+                success: "text-accent-300 [&_svg]:fill-accent-300 [&_svg_path]:stroke-neutral-950 \
+                    dark:text-primary-600 dark:[&_svg]:fill-primary-600 dark:[&_svg_path]:stroke-neutral-50"
+            }
+        }} icons={{
+            success: <CircleCheckIcon />,
+            error: <CircleXIcon />,
+        }} />
     </>
 }    
 
