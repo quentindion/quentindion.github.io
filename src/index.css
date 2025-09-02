@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: "Geist";
-    src: local("Geist"), url("../../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2");
+    src: local("Geist"), url("../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2");
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
