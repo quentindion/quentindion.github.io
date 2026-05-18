@@ -21,7 +21,7 @@ import { AtSignIcon, LucideIcon } from 'lucide-react';
 import { RulerCrossPen } from '@solar-icons/react-perf/category/tools/BoldDuotone';
 import { StarsMinimalistic } from '@solar-icons/react-perf/category/astronomy/BoldDuotone';
 import { Widget5 } from '@solar-icons/react-perf/category/settings/BoldDuotone';
-import { CheckCircle, Danger, Database } from '@solar-icons/react-perf/category/ui/BoldDuotone';
+import { CheckCircle, Database } from '@solar-icons/react-perf/category/ui/BoldDuotone';
 import { WindowFrame } from '@solar-icons/react-perf/category/it/BoldDuotone';
 import { ClipboardCheck, Documents } from '@solar-icons/react-perf/category/notes/BoldDuotone';
 import { History2 } from '@solar-icons/react-perf/category/time/BoldDuotone';
