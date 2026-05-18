@@ -1,7 +1,7 @@
-import { HTMLProps, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import wavingHand from '../src/assets/Waving Hand.webp'
 import { cn } from './utils';
-import { animate, motion, MotionValue, useAnimation, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion';
+import { animate, useMotionValue } from 'framer-motion';
 import GithubIcon from "./assets/github-181717.svg?react";
 import LinkedinIcon from "./assets/linkedin-0A66C2.svg?react";
 import YoutubeIcon from "./assets/youtube-FF0000.svg?react";
@@ -15,7 +15,7 @@ import TSIcon from "./assets/typescript-3178C6.svg?react";
 import ReactIcon from "./assets/react-61DAFB.svg?react";
 import HonoIcon from "./assets/hono-E36002.svg?react";
 import TailwindCssIcon from "./assets/tailwindcss-06B6D4.svg?react";
-import InfiniteLooper from './InfiniteLooper';
+import InfiniteLooper from './components/InfiniteLooper';
 import { useAnimateInView, useTheme } from './hooks';
 import { AtSignIcon, LucideIcon } from 'lucide-react';
 import { RulerCrossPen } from '@solar-icons/react-perf/category/tools/BoldDuotone';
@@ -27,6 +27,8 @@ import { ClipboardCheck, Documents } from '@solar-icons/react-perf/category/note
 import { History2 } from '@solar-icons/react-perf/category/time/BoldDuotone';
 import { Letter } from '@solar-icons/react-perf/category/messages/BoldDuotone';
 import { SquareAcademicCap2 } from '@solar-icons/react-perf/category/school/BoldDuotone';
+import Card from './components/Card';
+import Timeline from './components/Timeline';
 
 declare global {
     function isDark(): boolean
@@ -344,126 +346,4 @@ export default function App () {
             success: <CheckCircle className="size-10 *:first:opacity-15" />
         }} />
     </>
-}    
-
-type CardProps = HTMLProps<HTMLElement> & {
-    mousePosition: {
-        x: MotionValue<number>,
-        y: MotionValue<number>
-    }
-}
-
-function Card ({children, className, mousePosition}: CardProps) {
-
-    const ref = useRef<HTMLDivElement>(null);
-
-    const { scrollY, scrollX } = useScroll();
-    
-    const bounds = useCallback(() => ref.current?.getBoundingClientRect(), []);
-
-    const relativeX = useTransform<number, string>([mousePosition.x, scrollX], ([x]) => `${x - (bounds()?.left ?? 0)}px`);
-    const relativeY = useTransform<number, string>([mousePosition.y, scrollY], ([y]) => `${y - (bounds()?.top ?? 0)}px`);
-
-    return <motion.div ref={ref} className={cn("card", className)} style={{
-        "--spotlight-x": relativeX,
-        "--spotlight-y": relativeY,
-    }}>
-        <div className="card-content transition-all">{children}</div>
-    </motion.div>
-    
-}
-
-function Timeline ({items, className}: HTMLProps<HTMLElement> & {items: Experience[]}) {
-
-    const ref = useRef<HTMLDivElement>(null);
-
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start 75%", "end 75%"]
-    });
-
-    const lineHeight = useSpring(scrollYProgress);
-
-    return <div ref={ref} className={cn("relative contain-paint", className)}>
-
-        <motion.div className="absolute w-0.5 h-full top-0 left-1.75 sm:left-29.75 bg-linear-to-b from-accent to-primary z-1 origin-top" 
-            style={{scaleY: lineHeight}} />
-
-        {items.map(({dates, title, company, description}, i) => <div key={i} className="relative flex flex-col">
-            {dates[0] && <h3 className="flex sm:flex-row-reverse w-32 mb-0 text-muted">
-                <div className="motion-fade-scale z-1">
-                    <TimelineDot />
-                </div>
-                <div className="flex-1 motion-fade-right">{dates[0]}</div>
-            </h3>}
-            <div className="flex flex-col items-start pl-6 ml-1.75 sm:ml-29.75 pb-8 border-l-2 border-border">
-                <h3 className="mt-4 sm:-mt-4.5 motion-fade-left">{title}</h3>
-                {company && <h3 className="motion-fade-left">{company}</h3>}
-                <p className="text-muted leading-4 motion-fade-left">{description}</p>
-            </div>
-            {dates[1] && (dates[1] !== items[i + 1].dates[0]) && 
-                <h3 className="flex sm:flex-row-reverse w-32 mb-4 text-muted">
-                    <div className="motion-fade-scale z-1">
-                        <TimelineDot />
-                    </div>
-                    <div className="flex-1 motion-fade-right">{dates[1]}</div>
-                </h3>}
-        </div>)}
-    </div>
-}
-
-function TimelineDot ({className}: {className?: string}) {
-
-    const ref = useRef<HTMLDivElement>(null);
-
-    const [isMounted, setIsMounted] = useState<boolean>(false);
-
-    useEffect(() => setIsMounted(true), []);
-
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start 75%", "end 75%"]
-    });
-
-    const backgroundColor = useTransform(
-        scrollYProgress,
-        [0, 1],
-        ["var(--color-background)", "var(--color-primary)"]
-    );
-
-    const borderColor = useTransform(
-        scrollYProgress,
-        [0, 1],
-        ["var(--color-border)", "var(--color-background)"]
-    );
-
-    const controls = useAnimation();
-    const hasPlayed = useRef<boolean>(false);
-
-    useMotionValueEvent(scrollYProgress, "change", (v) => {
-        if (v === 0)
-            hasPlayed.current = false;
-        else if(!hasPlayed.current) {
-            hasPlayed.current = true;
-            controls.start({
-                scale: [1, 1.5, 1],
-                transition: {
-                    duration: 0.4,
-                    ease: "easeInOut"
-                }
-            });
-        }
-    });
-
-    return <motion.div ref={ref} initial={{ scale: 1 }} animate={controls} 
-        style={{
-            backgroundColor: isMounted ? backgroundColor : "var(--color-background)",
-            borderColor: isMounted ? borderColor : "var(--color-border)"
-        }}
-        className={cn(
-            "relative rounded-full size-4 border-2 border-border transition-colors",
-            "bg-background ring-2 ring-background",
-            className
-        )}
-    />
 }
