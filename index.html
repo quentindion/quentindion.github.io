@@ -8,6 +8,9 @@
     <link rel="icon" href="favicon.svg" type="image/x-icon" media="(prefers-color-scheme:no-preference)">
     <meta name="description" content="Lead Web Developer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <script>
         window.isDark=()=>(localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches))
         window.applyTheme=()=>document.documentElement.classList.toggle("dark", window.isDark())

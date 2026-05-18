@@ -1,43 +1,25 @@
-@import "https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/around.min.css";
+@import "https://cdn.jsdelivr.net/npm/theme-toggles@latest/css/expand.min.css";
 
-@import 'tailwindcss';
-
-@font-face {
-    font-family: "Geist";
-    src: local("Geist"), url("../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2");
-}
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
 
-    --font-sans: "Geist", sans-serif;
+    --font-sans: "Inter", sans-serif;
 
-    --color-primaryd-50: var(--color-emerald-50);
-    --color-primary-100: var(--color-emerald-100);
-    --color-primary-200: var(--color-emerald-200);
-    --color-primary-300: var(--color-emerald-300);
-    --color-primary-400: var(--color-emerald-400);
-    --color-primary-500: var(--color-emerald-500);
-    --color-primary-600: var(--color-emerald-600);
-    --color-primary-700: var(--color-emerald-700);
-    --color-primary-800: var(--color-emerald-800);
-    --color-primary-900: var(--color-emerald-900);
-    --color-primary-950: var(--color-emerald-950);
+    --color-background: var(--color-neutral-50);
+    --color-foreground: var(--color-neutral-950);
+    --color-border: var(--color-neutral-200);
+    --color-muted: var(--color-neutral-500);
 
-    --color-accentd-50: var(--color-lime-50);
-    --color-accent-100: var(--color-lime-100);
-    --color-accent-200: var(--color-lime-200);
-    --color-accent-300: var(--color-lime-300);
-    --color-accent-400: var(--color-lime-400);
-    --color-accent-500: var(--color-lime-500);
-    --color-accent-600: var(--color-lime-600);
-    --color-accent-700: var(--color-lime-700);
-    --color-accent-800: var(--color-lime-800);
-    --color-accent-900: var(--color-lime-900);
-    --color-accent-950: var(--color-lime-950);
+    --color-primary: var(--color-emerald-600);
+    --color-primary-shadow: var(--color-emerald-800);
+    
+    --color-accent: var(--color-lime-500);
+    --color-accent-shadow: var(--color-lime-700);
 
-    --pattern-fg: color-mix(in oklab, var(--color-black) 5%, transparent);
+    --pattern-fg: var(--color-border);
 
     --animate-looper: looper linear infinite;
 
@@ -47,43 +29,101 @@
     }
 }
 
+.dark {
+
+    --color-background: var(--color-neutral-950);
+    --color-foreground: var(--color-neutral-300);
+
+    --color-border: var(--color-neutral-800);
+
+    --color-primary: var(--color-emerald-700);
+    --color-primary-shadow: var(--color-emerald-900);
+
+    --color-accent: var(--color-lime-500);
+}
+
+@layer base {
+
+    html {
+        @apply font-sans bg-background text-foreground
+            selection:bg-accent selection:text-neutral-950;
+    }
+
+    #root {
+        @apply relative flex flex-col min-h-dvh overflow-x-clip;
+    }
+
+    h1 {
+        @apply title font-bold text-6xl md:text-7xl;
+    }
+
+    h2 {
+        @apply title text-2xl mb-4;
+    }
+    
+    h3 {
+        @apply title text-lg mb-4;
+    }
+
+    a {
+        @apply underline underline-offset-2 hover:decoration-transparent transition-colors;
+    }
+
+    button {
+        @apply button;
+    }
+
+    .container { position: unset !important; }
+}
+
 @utility container {
     @apply relative max-w-(--breakpoint-xl) w-full px-8 self-center;
 }
 
-@utility button {
-    @apply relative text-sm font-bold inline-flex px-3 py-1.5 gap-2 items-center cursor-pointer rounded-3xl no-underline transition-all
-        before:content-[''] before:absolute before:top-0 before:left-0 before:inset-0 before:rounded-full before:-z-1 before:scale-90 before:opacity-0 before:transition-all
-        dark:before:bg-neutral-50 before:bg-neutral-950
-        hover:before:scale-100 hover:before:opacity-100 hover:text-white dark:hover:text-black
-        hover:*:[.youtube-icon]:text-[#ff0000]
-        hover:*:[.linkedin-icon]:text-[#0A66C2]
-        dark:hover:*:[.github-icon]:text-[#181717]
-        active:scale-90;
+@utility title {
+    @apply leading-none tracking-tight font-medium inline-flex gap-3 items-center;
 }
 
-@utility button-icon {
-    @apply button size-9 p-0 rounded-full items-center justify-center;
+@utility highlight {
+    @apply font-semibold;
+}
+
+@utility button {
+    @apply relative inline-flex items-center text-sm font-semibold px-4 py-2 gap-2 cursor-pointer no-underline
+        rounded-2xl ring-1 ring-border backdrop-blur-xl select-none
+        transition-[scale,color]
+        sm:hover:scale-105
+        active:scale-95 sm:active:scale-100;
+}
+
+@utility button--ripple {
+    @apply contain-paint 
+        before:content-[""] before:absolute  before:left-0 before:top-[101%] before:h-full before:w-full before:-z-1 before:pointer-events-none 
+        before:rounded-t-[100%] before:bg-foreground
+        before:transition-[top,border-radius] before:duration-500 before:ease-in-out
+        hover:text-background
+        hover:before:rounded-t-none hover:before:top-0;
 }
 
 @utility card {
     --spotlight-x: 0;
     --spotlight-y: -100vh;
-    --spotlight-color: --theme(--color-primary-500 / 5%);
-    --spotlight-border-from: --theme(--color-accent-500 / 100%);
-    --spotlight-border-to: --theme(--color-primary-500 / 30%);
+    --spotlight-color: --theme(--color-primary / 5%);
+    --spotlight-border-from: --theme(--color-primary / 50%);
+    --spotlight-border-via: --theme(--color-accent / 75%);
+    --spotlight-border-to: --theme(--color-accent / 100%);
+    --spotlight-border: --theme(--color-border / 100%);
 
-    @apply relative p-[1px] rounded-[13px] transition-colors shadow-xs
-            bg-[radial-gradient(100rem_circle_at_var(--spotlight-x)_var(--spotlight-y),_var(--spotlight-border-from),_var(--spotlight-border-to),_#e5e5e5_15%)]
-            dark:bg-[radial-gradient(100rem_circle_at_var(--spotlight-x)_var(--spotlight-y),_var(--spotlight-border-from),_var(--spotlight-border-to),_#262626_15%)]
+    @apply relative p-px rounded-[13px] transition-colors shadow-xs
+            bg-[radial-gradient(150rem_circle_at_var(--spotlight-x)_var(--spotlight-y),var(--spotlight-border-to),var(--spotlight-border-via),var(--spotlight-border-from),var(--spotlight-border)_15%)]
             before:content-[''] before:size-full before:absolute before:top-0 before:left-0 before:rounded-[13px] before:transition-opacity
-            before:bg-[radial-gradient(60rem_circle_at_var(--spotlight-x)_var(--spotlight-y),_var(--spotlight-color),_transparent_35%)]
+            before:bg-[radial-gradient(80rem_circle_at_var(--spotlight-x)_var(--spotlight-y),var(--spotlight-color),transparent_35%)]
             before:opacity-0
             hover:before:opacity-100;
 }
 
 @utility card-content {
-    @apply rounded-xl p-4 size-full bg-white dark:bg-neutral-900 *:relative;
+    @apply rounded-xl p-4 size-full bg-background *:relative;
 }
 
 @utility labels {
@@ -91,7 +131,7 @@
 }
 
 @utility label {
-    @apply text-sm font-semibold tracking-tight px-1.5 rounded-md bg-neutral-700 text-white;
+    @apply text-sm font-semibold tracking-tight px-1.5 rounded-lg border border-border bg-foreground/5;
 }
 
 @utility motion-fade {
@@ -119,7 +159,11 @@
 }
 
 @utility gradient-primary {
-    @apply from-accent-500 to-primary-600 dark:from-accent-300 dark:to-primary-500;
+    @apply from-accent to-primary;
+}
+
+@utility gradient-primary-shadow {
+    @apply from-accent-shadow to-primary-shadow;
 }
 
 @utility text-gradient {
@@ -130,43 +174,12 @@
     @apply text-gradient gradient-primary;
 }
 
+@utility text-gradient-primary-shadow {
+    @apply text-gradient gradient-primary-shadow;
+}
+
 @utility bg-dashed {
-    @apply bg-[image:repeating-linear-gradient(315deg,_var(--pattern-fg)_0,_var(--pattern-fg)_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed;
+    @apply bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed;
 }
 
-@layer base {
-
-    html {
-        @apply font-sans bg-neutral-50 text-neutral-950
-            dark:bg-neutral-900 dark:text-white
-            selection:bg-accent-500 selection:text-white;
-    }
-
-    #root {
-        @apply relative flex flex-col min-h-dvh overflow-x-clip;
-    }
-
-    h1 {
-        @apply font-bold leading-none tracking-tight text-6xl md:text-7xl;
-    }
-
-    h2 {
-        @apply text-2xl font-semibold leading-none tracking-tight mb-4
-            after:content-[''] after:inline-block after:size-2 after:ml-1 after:rounded-full after:bg-linear-to-br
-            after:gradient-primary;
-    }
-    
-    h3 {
-        @apply text-lg font-semibold leading-none tracking-tight mb-4;
-    }
-
-    a {
-        @apply underline underline-offset-2 hover:decoration-transparent transition-colors;
-    }
-
-    .container { position: unset !important; }
-
-    .dark {
-        --pattern-fg: color-mix(in oklab, var(--color-white) 10%, transparent);
-    }
-}
+@utility bg-ambilight { @apply drop-shadow-xl bg-radial-[200%_200%_at_30%_30%] from-transparent from-30%; }
