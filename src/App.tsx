@@ -186,7 +186,7 @@ export default function App () {
                         </div>
                     </nav>
                     <div className="motion-fade-up">
-                        <button className="size-9 p-0 justify-center" onClick={toggleTheme}>
+                        <button className="size-9 p-0 justify-center" aria-label="Change theme" onClick={toggleTheme}>
                             <div className={`theme-toggle ${!isDarkMode && "theme-toggle--toggled"}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 32 32"
                                     className="theme-toggle__expand size-6">
@@ -205,7 +205,7 @@ export default function App () {
 
                 <section className="relative mt-20 md:mt-32 px-0 flex flex-col items-start *:backdrop-blur-lg">
                     <span className="font-medium text-lg px-4 py-2 text-muted motion-fade-up">
-                        Hello <img src={wavingHand} alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
+                        Hello <img src={wavingHand} loading="lazy" alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
                     </span>
                     <h1 className="inline-block px-4 py-2 z-1 motion-fade-up">
                         <span className="drop-shadow-lg drop-shadow-black/25">Lead Web</span>
@@ -321,7 +321,7 @@ export default function App () {
                     <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
                     <h2 className="p-4 mb-0 motion-fade-up"><Letter /> Contact</h2>
                     <p className="pb-4 px-4">
-                        <a className="motion-fade cursor-pointer select-none" onClick={copyContact}>contact@quentindion.me</a>
+                        <button className="motion-fade cursor-pointer select-none button--ripple" onClick={copyContact}>contact@quentindion.me</button>
                     </p>
                     <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
                 </section>
