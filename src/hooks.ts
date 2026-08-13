@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { DOMKeyframesDefinition, animate } from 'framer-motion';
-import { useLocalStorage } from "usehooks-ts";
+import { useLocalStorage, useCopyToClipboard as useOriginalCopyToClipboard } from "react-use";
 
 export type Theme = undefined | "light" | "dark";
 
@@ -8,10 +8,7 @@ export function useTheme() {
 
     const [theme, setTheme] = useState<Theme>(window.isDark() ? "dark" : "light");
     
-    const [storedTheme, setStoredTheme, removeStoredTheme] = useLocalStorage<Theme>("theme", undefined, {
-        serializer: value => `${value}`,
-        deserializer: value => value as Theme,
-    });
+    const [storedTheme, setStoredTheme, removeStoredTheme] = useLocalStorage<Theme>("theme", undefined);
 
     const toggleTheme = () => {
 
@@ -28,6 +25,25 @@ export function useTheme() {
     useEffect(() => { setTheme(storedTheme); }, [storedTheme]);
 
     return [theme, toggleTheme] as [typeof theme, typeof toggleTheme];
+}
+
+export function useCopyToClipboard() {
+
+    const [state, originalCopy] = useOriginalCopyToClipboard();
+    const [copied, setCopied] = useState(false);
+
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+    useEffect(() => () => clearTimeout(timeoutRef.current), []);
+
+    const copyToClipboard = (value: string) => {
+        originalCopy(value);
+        setCopied(true);
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => setCopied(false), 3000);
+    };
+
+    return [{ ...state, copied }, copyToClipboard] as const;
 }
 
 export function useAnimateInView(

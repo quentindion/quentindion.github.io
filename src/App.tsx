@@ -1,12 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import wavingHand from '../src/assets/Waving Hand.webp'
 import { cn } from './utils';
-import { animate, useMotionValue } from 'framer-motion';
+import { animate, AnimatePresence, motion, useMotionValue } from 'framer-motion';
 import GithubIcon from "./assets/github-181717.svg?react";
 import LinkedinIcon from "./assets/linkedin-0A66C2.svg?react";
 import YoutubeIcon from "./assets/youtube-FF0000.svg?react";
-import { useCopyToClipboard } from 'usehooks-ts';
-import { toast, Toaster } from 'sonner';
 import DockerIcon from "./assets/docker-2496ED.svg?react";
 import LaravelIcon from "./assets/laravel-FF2D20.svg?react";
 import BunIcon from "./assets/bun-f472b6.svg?react";
@@ -15,17 +13,17 @@ import TSIcon from "./assets/typescript-3178C6.svg?react";
 import ReactIcon from "./assets/react-61DAFB.svg?react";
 import HonoIcon from "./assets/hono-E36002.svg?react";
 import TailwindCssIcon from "./assets/tailwindcss-06B6D4.svg?react";
-import InfiniteLooper from './components/InfiniteLooper';
-import { useAnimateInView, useTheme } from './hooks';
+import N8nIcon from "./assets/n8n-EA4B71.svg?react";
+import InfiniteLoops from './components/InfiniteLoops';
+import { useAnimateInView, useCopyToClipboard, useTheme } from './hooks';
 import { AtSignIcon, LucideIcon } from 'lucide-react';
 import { RulerCrossPen } from '@solar-icons/react-perf/category/tools/BoldDuotone';
 import { StarsMinimalistic } from '@solar-icons/react-perf/category/astronomy/BoldDuotone';
 import { Widget5 } from '@solar-icons/react-perf/category/settings/BoldDuotone';
 import { CheckCircle, Database } from '@solar-icons/react-perf/category/ui/BoldDuotone';
 import { WindowFrame } from '@solar-icons/react-perf/category/it/BoldDuotone';
-import { ClipboardCheck, Documents } from '@solar-icons/react-perf/category/notes/BoldDuotone';
 import { History2 } from '@solar-icons/react-perf/category/time/BoldDuotone';
-import { Letter } from '@solar-icons/react-perf/category/messages/BoldDuotone';
+import { Letter, Pen2 } from '@solar-icons/react-perf/category/messages/BoldDuotone';
 import { SquareAcademicCap2 } from '@solar-icons/react-perf/category/school/BoldDuotone';
 import Card from './components/Card';
 import Timeline from './components/Timeline';
@@ -94,6 +92,7 @@ export default function App () {
 
     const tech = useMemo(() => [
         {Icon: DockerIcon,      className: "fill-[#2496ED]", name: "Docker"},
+        {Icon: N8nIcon,         className: "fill-[#EA4B71]", name: "N8N"},
         {Icon: LaravelIcon,     className: "fill-[#FF2D20]", name: "Laravel"},
         {Icon: BunIcon,         className: "fill-[#f472b6]", name: "Bun"},
         {Icon: ViteIcon,        className: "fill-[#9135FF]", name: "Vite"},
@@ -141,16 +140,10 @@ export default function App () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [, copy] = useCopyToClipboard();
-
-    const copyContact = async () => {
-
-        await copy("contact@quentindion.me");
-        
-        toast.success("Copié dans le presse-papiers.", {
-            dismissible: true,
-            icon: <ClipboardCheck className="size-10 *:first:opacity-15" />
-        });
+    const [copyState, copyToClipboard] = useCopyToClipboard();
+    
+    function copyContact () {
+        copyToClipboard("contact@quentindion.me");
     }
 
     return <>
@@ -166,27 +159,27 @@ export default function App () {
                     <nav className="flex flex-wrap gap-4 justify-start">
                         <div className="motion-fade-up">
                             <a className="button button--ripple" href="https://github.com/quentindion" role="button" aria-label="Github">
-                                <GithubIcon className="-ml-1 size-6 fill-current github-icon" /> Github
+                                <GithubIcon className="-ml-2 mr-1 size-5 fill-current github-icon" /> Github
                             </a>
                         </div>
                         <div className="motion-fade-up">
                             <a className="button button--ripple group" href="https://www.youtube.com/@vs2kf" role="button" aria-label="Youtube">
-                                <YoutubeIcon className="-ml-1 size-6 fill-current youtube-icon transition-[fill] group-hover:fill-[#ff0000]" /> Youtube
+                                <YoutubeIcon className="-ml-2 mr-1 size-5 fill-current youtube-icon transition-[fill] group-hover:fill-[#ff0000]" /> Youtube
                             </a>
                         </div>
                         <div className="motion-fade-up">
                             <a className="button button--ripple group" href="https://www.linkedin.com/in/quentindion" role="button" aria-label="LinkedIn">
-                                <LinkedinIcon className="-ml-1 size-6 fill-current youtube-icon transition-[fill] group-hover:fill-[#0A66C2]" /> LinkedIn
+                                <LinkedinIcon className="-ml-2 mr-1 size-5 fill-current youtube-icon transition-[fill] group-hover:fill-[#0A66C2]" /> LinkedIn
                             </a>
                         </div>
                         <div className="motion-fade-up">
                             <a className="button button--ripple" onClick={copyContact} role="button" aria-label="Mail">
-                                <AtSignIcon className="-ml-1 transition-colors" /> Contact
+                                <AtSignIcon className="-ml-2 mr-1 size-5 transition-colors" /> Contact
                             </a>
                         </div>
                     </nav>
                     <div className="motion-fade-up">
-                        <button className="size-9 p-0 justify-center" aria-label="Change theme" onClick={toggleTheme}>
+                        <button className="size-10 p-0 justify-center" aria-label="Change theme" onClick={toggleTheme}>
                             <div className={`theme-toggle ${!isDarkMode && "theme-toggle--toggled"}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 32 32"
                                     className="theme-toggle__expand size-6">
@@ -210,8 +203,9 @@ export default function App () {
                     <h1 className="inline-block px-4 py-2 z-1 motion-fade-up">
                         <span className="drop-shadow-lg drop-shadow-black/25">Lead Web</span>
                         <span className="relative">
-                            <span className="absolute inset-0 left-4 top-3 text-gradient-primary-shadow opacity-33 blur-lg"> Developer</span>
-                            <span className="relative text-gradient-primary"> Developer</span>
+                            <span className="relative"> Developer</span>
+                            <span className="absolute inset-0 left-4 top-2 text-black/50 dark:text-white/50
+                                blur-sm pointer-events-none"> Developer</span>
                         </span>
                     </h1>
                     <p className="font-medium text-lg px-4 py-2 max-w-(--breakpoint-md) text-muted motion-fade-up">
@@ -220,19 +214,19 @@ export default function App () {
                 </section>
 
                 <section className="relative pb-4 mt-20 md:mt-32 backdrop-blur-lg">
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
-                    <h2 className="p-4 motion-fade-up"><RulerCrossPen /> Mes outlis</h2>
-                    <InfiniteLooper className="mask-x-from-90% mask-x-to-100% motion-fade" duration={10} direction="left">
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
+                    <h2 className="p-4 motion-fade-up"><RulerCrossPen className="size-8" /> Mes outlis</h2>
+                    <InfiniteLoops className="mask-x-from-90% mask-x-to-100% motion-fade" duration={20} direction="left">
                         {tech.map(({Icon, className, name}) => <div key={name} className="flex gap-2 items-center w-max text-2xl font-bold">
                             <Icon className={cn("h-12 w-auto", className)} /> {name}
                         </div>)}
-                    </InfiniteLooper>
-                    <div className="absolute -left-[100vw] w-[200vw] bottom-0 h-px bg-border" />
+                    </InfiniteLoops>
+                    <div className="absolute left-[-100vw] w-[200vw] bottom-0 h-px bg-border" />
                 </section>
 
                 <section className="relative mt-20 md:mt-32 backdrop-blur-lg">
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
-                    <h2 className="p-4 motion-fade-up"><StarsMinimalistic /> Compétences</h2>
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
+                    <h2 className="p-4 motion-fade-up"><StarsMinimalistic className="size-8" /> Compétences</h2>
                     <div className="flex flex-wrap items-stretch justify-start gap-4 px-4 pb-4">
                         <div className="flex-[1_1_28rem] motion-fade-scale">
                             <Card className="h-full" mousePosition={{x: mouseX, y: mouseY}}>
@@ -255,12 +249,13 @@ export default function App () {
                             <Card className="h-full" mousePosition={{x: mouseX, y: mouseY}}>
                                 <h3><Database /> Base de donnée & BI</h3>
                                 <div className="labels mb-4">
-                                    <div className="label">Qlik Sense</div>
-                                    <div className="label">Power BI</div>
                                     <div className="label">MSSQL</div>
                                     <div className="label">Postgres</div>
                                     <div className="label">MongoDB</div>
                                     <div className="label">Supabase</div>
+                                    <div className="label">N8N</div>
+                                    <div className="label">Qlik Sense</div>
+                                    <div className="label">Power BI</div>
                                 </div>
                                 <p className="relative text-pretty">
                                     Gestion de <span className="highlight">bases de données </span>
@@ -276,8 +271,8 @@ export default function App () {
                                 <div className="labels mb-4">
                                     <div className="label">PHP</div>
                                     <div className="label">Laravel</div>
-                                    <div className="label">NodeJS</div>
-                                    <div className="label">ElectronJS</div>
+                                    <div className="label">Bun</div>
+                                    <div className="label">Electron</div>
                                 </div>
                                 <p className="relative text-pretty">
                                     Développement d'<span className="highlight">API </span>
@@ -289,7 +284,7 @@ export default function App () {
                         </div>
                         <div className="flex-[1_1_28rem] motion-fade-scale">
                             <Card className="h-full" mousePosition={{x: mouseX, y: mouseY}}>
-                                <h3><Documents /> CMS</h3>
+                                <h3><Pen2 /> CMS</h3>
                                 <div className="labels">
                                     <div className="label mb-4">Wordpress</div>
                                 </div>
@@ -300,50 +295,58 @@ export default function App () {
                             </Card>
                         </div>
                     </div>
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
                 <section className="relative mt-20 md:mt-32">
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
-                    <h2 className="p-4 motion-fade-up"><History2 /> Expériences</h2>
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
+                    <h2 className="p-4 motion-fade-up"><History2 className="size-8" /> Expériences</h2>
                     <Timeline items={experiences} className="mx-4" />
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
                 <section className="relative mt-20 md:mt-32">
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
-                    <h2 className="p-4 motion-fade-up"><SquareAcademicCap2 /> Formations</h2>
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
+                    <h2 className="p-4 motion-fade-up"><SquareAcademicCap2 className="size-8" /> Formations</h2>
                     <Timeline items={training} className="mx-4" />
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
                 <section id="contact" className="relative mt-20 md:mt-32">
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
-                    <h2 className="p-4 mb-0 motion-fade-up"><Letter /> Contact</h2>
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
+                    <h2 className="p-4 mb-0 motion-fade-up"><Letter className="size-8" /> Contact</h2>
                     <p className="pb-4 px-4">
                         <button className="motion-fade cursor-pointer select-none button--ripple" onClick={copyContact}>contact@quentindion.me</button>
                     </p>
-                    <div className="absolute -left-[100vw] w-[200vw] h-px bg-border" />
+                    <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
                 <section className="h-36"></section>
             </div>
-
             <div className="min-w-4 md:min-w-8 bg-dashed border-x border-border" />
         </article>
-        <Toaster position="bottom-center" swipeDirections={["bottom", "left", "right"]} toastOptions={{
-            unstyled: true,
-            classNames: {
-                toast: "flex flex-shrink-0 gap-4 w-fit overflow-hidden px-4 py-3 rounded-3xl transition-all transform-gpu \
-                    shadow shadow-2xl shadow-black/50 bg-background/25 backdrop-blur-lg",
-                content: "flex-1 flex flex-col justify-center",
-                title: "font-semibold",
-                icon: "size-10",
-                success: "text-lime-600 bg-ambilight to-lime-400/75 shadow-lime-900/50 \
-                    dark:to-lime-950/75 dark:shadow-black"
-            }
-        }} icons={{
-            success: <CheckCircle className="size-10 *:first:opacity-15" />
-        }} />
+        <div className="fixed top-4 left-0 w-full flex items-center justify-center z-1">
+            <div className={`relative flex items-center text-sm font-semibold rounded-3xl overflow-hidden *:overflow-hidden bg-black dark:bg-white text-background 
+                not-empty:shadow-2xl not-empty:shadow-black transition-all
+                ${copyState.copied && "not-dark:bg-ambilight to-lime-500/30 dark:not-empty:shadow-lime-950"}`}
+            >
+                <AnimatePresence>
+                    {copyState.copied && <>
+                        <motion.div
+                            initial={{width: 0, height: 0, margin: 0}}
+                            animate={{width: 32, height: 32, margin: 4}}
+                            exit={{width: 0, height: 0, margin: 0, transition: {delay: 0.2}}}>
+                            <CheckCircle className="relative size-full *:first:opacity-100 *:first:fill-lime-300 in-dark:*:first:fill-lime-500 *:last:fill-black" />
+                        </motion.div>
+                        <motion.div className="relative whitespace-nowrap"
+                            initial={{width: 0, marginLeft: 0, marginRight: 0}}
+                            animate={{width: "auto", marginLeft: 4, marginRight: 16, transition: {delay: 0.2}}}
+                            exit={{width: 0, marginLeft: 0, marginRight: 0, height: ["auto", 0]}}>
+                            Copié dans le presse papier.
+                        </motion.div>
+                    </>}
+                </AnimatePresence>
+            </div>
+        </div>
     </>
 }

@@ -17,7 +17,7 @@ export default function Timeline ({items, className}: HTMLProps<HTMLElement> & {
 
     return <div ref={ref} className={cn("relative contain-paint", className)}>
 
-        <motion.div className="absolute w-0.5 h-full top-0 left-1.75 sm:left-29.75 bg-linear-to-b from-accent to-primary z-1 origin-top" 
+        <motion.div className="absolute w-0.5 h-full top-0 left-1.75 sm:left-29.75 bg-linear-to-b from-lime-500 to-emerald-600 z-1 origin-top" 
             style={{scaleY: lineHeight}} />
 
         {items.map(({dates, title, company, description}, i) => <div key={i} className="relative flex flex-col">

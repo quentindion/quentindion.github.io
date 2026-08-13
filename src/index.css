@@ -13,19 +13,13 @@
     --color-border: var(--color-neutral-200);
     --color-muted: var(--color-neutral-500);
 
-    --color-primary: var(--color-emerald-600);
-    --color-primary-shadow: var(--color-emerald-800);
-    
-    --color-accent: var(--color-lime-500);
-    --color-accent-shadow: var(--color-lime-700);
-
     --pattern-fg: var(--color-border);
 
-    --animate-looper: looper linear infinite;
+    --animate-infinite-loops: infinite-loops linear infinite;
 
-    @keyframes looper {
+    @keyframes infinite-loops {
         from {transform: translateX(0);}
-        to {transform: translateX(calc(var(--looper-loops) * 100% * -1));}
+        to {transform: translateX(calc(var(--infinite-loops) * 100% * -1));}
     }
 }
 
@@ -35,18 +29,12 @@
     --color-foreground: var(--color-neutral-300);
 
     --color-border: var(--color-neutral-800);
-
-    --color-primary: var(--color-emerald-700);
-    --color-primary-shadow: var(--color-emerald-900);
-
-    --color-accent: var(--color-lime-500);
 }
 
 @layer base {
 
     html {
-        @apply font-sans bg-background text-foreground
-            selection:bg-accent selection:text-neutral-950;
+        @apply font-sans bg-background text-foreground selection:bg-foreground/80 selection:text-background scrollbar-thin;
     }
 
     #root {
@@ -58,11 +46,11 @@
     }
 
     h2 {
-        @apply title text-2xl mb-4;
+        @apply title text-2xl mb-4 font-medium;
     }
     
     h3 {
-        @apply title text-lg mb-4;
+        @apply title text-lg mb-4 font-medium;
     }
 
     a {
@@ -89,7 +77,7 @@
 }
 
 @utility button {
-    @apply relative inline-flex items-center text-sm font-semibold px-4 py-2 gap-2 cursor-pointer no-underline
+    @apply relative inline-flex items-center text-sm font-semibold px-5 h-10 gap-2 cursor-pointer no-underline
         rounded-2xl ring-1 ring-border backdrop-blur-xl select-none
         transition-[scale,color]
         sm:hover:scale-105
@@ -108,24 +96,72 @@
 @utility card {
     --spotlight-x: 0;
     --spotlight-y: -100vh;
-    --spotlight-color: --theme(--color-primary / 5%);
-    --spotlight-border-from: --theme(--color-primary / 50%);
-    --spotlight-border-via: --theme(--color-accent / 75%);
-    --spotlight-border-to: --theme(--color-accent / 100%);
-    --spotlight-border: --theme(--color-border / 100%);
+    --spotlight-offset: 30px;
 
-    @apply relative p-px rounded-[13px] transition-colors shadow-xs
-            bg-[radial-gradient(150rem_circle_at_var(--spotlight-x)_var(--spotlight-y),var(--spotlight-border-to),var(--spotlight-border-via),var(--spotlight-border-from),var(--spotlight-border)_15%)]
-            before:content-[''] before:size-full before:absolute before:top-0 before:left-0 before:rounded-[13px] before:transition-opacity
-            before:bg-[radial-gradient(80rem_circle_at_var(--spotlight-x)_var(--spotlight-y),var(--spotlight-color),transparent_35%)]
-            before:opacity-0
-            hover:before:opacity-100;
+    --spotlight-cold: radial-gradient(
+        160rem circle at var(--spotlight-x) var(--spotlight-y) in oklab,
+        --theme(--color-rose-500 / 100%),
+        --theme(--color-red-500 / 100%),
+        --theme(--color-orange-500 / 100%),
+        --theme(--color-amber-500 / 100%),
+        --theme(--color-yellow-500 / 100%),
+        --theme(--color-lime-500 / 100%),
+        --theme(--color-green-500 / 100%),
+        --theme(--color-emerald-500 / 100%),
+        --theme(--color-teal-500 / 100%),
+        --theme(--color-cyan-500 / 100%),
+        --theme(--color-sky-500 / 100%),
+        --theme(--color-blue-500 / 75%),
+        --theme(--color-indigo-500 / 50%),
+        --theme(--color-border / 100%) 10%
+    );
+
+    --spotlight-warm: transparent;
+    --spotlight-cold-light: transparent;
+    --spotlight-warm-light: transparent;
+
+    @variant dark {
+        --spotlight-cold: radial-gradient(
+            160rem circle at calc(var(--spotlight-x) - var(--spotlight-offset)) var(--spotlight-y) in oklch,
+            --theme(--color-white / 100%),
+            --theme(--color-cyan-200 / 70%),
+            --theme(--color-blue-500 / 30%),
+            --theme(--color-neutral-700 / 100%) 10%
+        );
+
+        --spotlight-warm: radial-gradient(
+            160rem circle at calc(var(--spotlight-x) + var(--spotlight-offset)) var(--spotlight-y) in oklch,
+            --theme(--color-white / 100%),
+            --theme(--color-yellow-200 / 70%),
+            --theme(--color-amber-500 / 30%),
+            --theme(--color-neutral-700 / 100%) 10%
+        );
+
+        --spotlight-cold-light: radial-gradient(
+            80rem circle at calc(var(--spotlight-x) - var(--spotlight-offset)) var(--spotlight-y) in oklch,
+            --theme(--color-white / 100%),
+            --theme(--color-cyan-200 / 70%),
+            --theme(--color-blue-500 / 30%),
+            transparent 10%
+        );
+        
+        --spotlight-warm-light: radial-gradient(
+            80rem circle at calc(var(--spotlight-x) + var(--spotlight-offset)) var(--spotlight-y) in oklch,
+            --theme(--color-white / 100%),
+            --theme(--color-yellow-200 / 70%),
+            --theme(--color-amber-500 / 30%),
+            transparent 10%
+        );
+    }
+
+    @apply relative p-px rounded-xl transition-colors shadow-xs [background:var(--spotlight-cold),var(--spotlight-warm)]
+        dark:bg-blend-soft-light
+        before:content-[''] before:size-full before:pointer-events-none before:absolute before:top-0 before:left-0
+        before:[background:var(--spotlight-cold-light),var(--spotlight-warm-light)]
+        before:blur-xl dark:before:blur-sm
+        before:mix-blend-saturation dark:before:mix-blend-plus-lighter;
 }
-
-@utility card-content {
-    @apply rounded-xl p-4 size-full bg-background *:relative;
-}
-
+    
 @utility labels {
     @apply flex flex-wrap gap-2;
 }
@@ -158,28 +194,12 @@
     @apply invisible;
 }
 
-@utility gradient-primary {
-    @apply from-accent to-primary;
-}
-
-@utility gradient-primary-shadow {
-    @apply from-accent-shadow to-primary-shadow;
-}
-
 @utility text-gradient {
     @apply bg-linear-to-br bg-clip-text text-transparent;
-}
-
-@utility text-gradient-primary {
-    @apply text-gradient gradient-primary;
-}
-
-@utility text-gradient-primary-shadow {
-    @apply text-gradient gradient-primary-shadow;
 }
 
 @utility bg-dashed {
     @apply bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed;
 }
 
-@utility bg-ambilight { @apply drop-shadow-xl bg-radial-[200%_200%_at_30%_30%] from-transparent from-30%; }
+@utility bg-ambilight { @apply drop-shadow-xl bg-radial-[100%_150%_at_30%_30%] from-transparent from-30%; }

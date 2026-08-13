@@ -36,8 +36,8 @@ export default function TimelineDot ({timelineRef, className}: {className?: stri
             "var(--color-background)",
             `color-mix(
                 in oklab,
-                var(--color-accent) ${(1 - ratio) * 100}%,
-                var(--color-primary)
+                var(--color-lime-500) ${(1 - ratio) * 100}%,
+                var(--color-emerald-600)
             )`
         ]
     );
