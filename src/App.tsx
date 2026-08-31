@@ -155,7 +155,7 @@ export default function App () {
             <div className="min-w-4 md:min-w-8 bg-dashed border-x border-border" />
             <div>
                 <section className="h-12"></section>
-                <div className="flex flex-row items-start justify-between mx-2 md:mx-8">
+                <div className="flex flex-row items-start justify-between gap-4 mx-2 md:mx-8">
                     <nav className="flex flex-wrap gap-4 justify-start">
                         <div className="motion-fade-up">
                             <a className="button button--ripple" href="https://github.com/quentindion" role="button" aria-label="Github">
@@ -201,12 +201,7 @@ export default function App () {
                         Hello <img src={wavingHand} loading="lazy" alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
                     </span>
                     <h1 className="inline-block px-4 py-2 z-1 motion-fade-up">
-                        <span className="drop-shadow-lg drop-shadow-black/25">Lead Web</span>
-                        <span className="relative">
-                            <span className="relative"> Developer</span>
-                            <span className="absolute inset-0 left-4 top-2 text-black/50 dark:text-white/50
-                                blur-sm pointer-events-none"> Developer</span>
-                        </span>
+                        Lead Web <span className="relative drop-shadow-lg drop-shadow-foreground/50">Developer</span>
                     </h1>
                     <p className="font-medium text-lg px-4 py-2 max-w-(--breakpoint-md) text-muted motion-fade-up">
                         Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.

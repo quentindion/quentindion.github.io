@@ -13,7 +13,11 @@
     --color-border: var(--color-neutral-200);
     --color-muted: var(--color-neutral-500);
 
-    --pattern-fg: var(--color-border);
+    --color-timeline-start: var(--color-black);
+    --color-timeline-end: var(--color-border);
+
+    --timeline-dot-shadow-from: 0 10px 15px -3px;
+    --timeline-dot-shadow-to: 0 4px 6px -4px;
 
     --animate-infinite-loops: infinite-loops linear infinite;
 
@@ -27,8 +31,12 @@
 
     --color-background: var(--color-neutral-950);
     --color-foreground: var(--color-neutral-300);
-
     --color-border: var(--color-neutral-800);
+
+    --color-timeline-start: var(--color-white);    
+
+    --timeline-dot-shadow-from: 0 0 15px -3px;
+    --timeline-dot-shadow-to: 0 0 6px -4px;
 }
 
 @layer base {
@@ -199,7 +207,7 @@
 }
 
 @utility bg-dashed {
-    @apply bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed;
+    @apply bg-[repeating-linear-gradient(315deg,var(--color-border)_0,var(--color-border)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed;
 }
 
 @utility bg-ambilight { @apply drop-shadow-xl bg-radial-[100%_150%_at_30%_30%] from-transparent from-30%; }
