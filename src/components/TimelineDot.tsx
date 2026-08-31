@@ -1,4 +1,4 @@
-import { color, motion, useAnimation, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { motion, useAnimation, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../utils";
 
