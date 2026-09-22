@@ -1,7 +1,7 @@
 import { HTMLProps, useRef } from "react";
 import { type Experience } from "../App";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { cn } from "../utils";
+import { cn } from "cn";
 import TimelineDot from "./TimelineDot";
 
 export default function Timeline ({items, className}: HTMLProps<HTMLElement> & {items: Experience[]}) {

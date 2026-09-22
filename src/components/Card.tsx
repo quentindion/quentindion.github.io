@@ -1,6 +1,6 @@
+import { cn } from "cn";
 import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
 import { HTMLProps, useCallback, useRef } from "react";
-import { cn } from "../utils";
 
 export type CardProps = HTMLProps<HTMLElement> & {
     mousePosition: {

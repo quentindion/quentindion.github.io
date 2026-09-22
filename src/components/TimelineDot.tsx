@@ -1,6 +1,6 @@
 import { motion, useAnimation, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { cn } from "../utils";
+import { cn } from "cn";
 
 export default function TimelineDot ({timelineRef, className}: {className?: string, timelineRef: RefObject<HTMLDivElement | null>}) {
 

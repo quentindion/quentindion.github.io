@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
+import { cn } from "cn"
 import wavingHand from '../src/assets/Waving Hand.webp'
-import { cn } from './utils';
 import { animate, AnimatePresence, motion, useMotionValue } from 'framer-motion';
 import GithubIcon from "./assets/github-181717.svg?react";
 import LinkedinIcon from "./assets/linkedin-0A66C2.svg?react";
@@ -27,6 +27,8 @@ import { Letter, Pen2 } from '@solar-icons/react-perf/category/messages/BoldDuot
 import { SquareAcademicCap2 } from '@solar-icons/react-perf/category/school/BoldDuotone';
 import Card from './components/Card';
 import Timeline from './components/Timeline';
+import { MorphIcon } from "morphicons/react";
+import { Moon, Sun } from "lucide"
 
 declare global {
     function isDark(): boolean
@@ -180,18 +182,7 @@ export default function App () {
                     </nav>
                     <div className="motion-fade-up">
                         <button className="size-10 p-0 justify-center" aria-label="Change theme" onClick={toggleTheme}>
-                            <div className={`theme-toggle ${!isDarkMode && "theme-toggle--toggled"}`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 32 32"
-                                    className="theme-toggle__expand size-6">
-                                    <clipPath id="theme-toggle__expand__cutout">
-                                        <path d="M0-11h25a1 1 0 0017 13v30H0Z" />
-                                    </clipPath>
-                                    <g clipPath="url(#theme-toggle__expand__cutout)">
-                                        <circle cx="16" cy="16" r="8.4" />
-                                        <path d="M18.3 3.2c0 1.3-1 2.3-2.3 2.3s-2.3-1-2.3-2.3S14.7.9 16 .9s2.3 1 2.3 2.3zm-4.6 25.6c0-1.3 1-2.3 2.3-2.3s2.3 1 2.3 2.3-1 2.3-2.3 2.3-2.3-1-2.3-2.3zm15.1-10.5c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zM3.2 13.7c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3S.9 17.3.9 16s1-2.3 2.3-2.3zm5.8-7C9 7.9 7.9 9 6.7 9S4.4 8 4.4 6.7s1-2.3 2.3-2.3S9 5.4 9 6.7zm16.3 21c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3zm2.4-21c0 1.3-1 2.3-2.3 2.3S23 7.9 23 6.7s1-2.3 2.3-2.3 2.4 1 2.4 2.3zM6.7 23C8 23 9 24 9 25.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3 1-2.3 2.3-2.3z" />
-                                    </g>
-                                </svg>
-                            </div>
+                            <MorphIcon icon={isDarkMode ? Sun : Moon} />
                         </button>
                     </div>
                 </div>
@@ -321,21 +312,23 @@ export default function App () {
             <div className="min-w-4 md:min-w-8 bg-dashed border-x border-border" />
         </article>
         <div className="fixed top-4 left-0 w-full flex items-center justify-center z-1">
-            <div className={`relative flex items-center text-sm font-semibold rounded-3xl overflow-hidden *:overflow-hidden bg-black dark:bg-white text-background 
-                not-empty:shadow-2xl not-empty:shadow-black transition-all
-                ${copyState.copied && "not-dark:bg-ambilight to-lime-500/30 dark:not-empty:shadow-lime-950"}`}
-            >
+            <div className={`relative flex items-center text-sm font-semibold rounded-3xl transition-all origin-center
+                overflow-hidden *:overflow-hidden
+                bg-black dark:bg-white text-background 
+                not-empty:shadow-2xl not-empty:shadow-black
+                ${copyState.copied && "not-dark:bg-ambilight to-lime-500/30 dark:not-empty:shadow-lime-950"}
+            `}>
                 <AnimatePresence>
                     {copyState.copied && <>
                         <motion.div
                             initial={{width: 0, height: 0, margin: 0}}
                             animate={{width: 32, height: 32, margin: 4}}
-                            exit={{width: 0, height: 0, margin: 0, transition: {delay: 0.2}}}>
-                            <CheckCircle className="relative size-full *:first:opacity-100 *:first:fill-lime-300 in-dark:*:first:fill-lime-500 *:last:fill-black" />
+                            exit={{width: 0, height: 0, margin: 0, transition: {delay: 0}}}>
+                            <CheckCircle className="relative size-8 *:first:opacity-100 *:first:fill-lime-300 in-dark:*:first:fill-lime-500 *:last:fill-black" />
                         </motion.div>
                         <motion.div className="relative whitespace-nowrap"
                             initial={{width: 0, marginLeft: 0, marginRight: 0}}
-                            animate={{width: "auto", marginLeft: 4, marginRight: 16, transition: {delay: 0.2}}}
+                            animate={{width: "auto", marginLeft: 4, marginRight: 16, transition: {delay: 0}}}
                             exit={{width: 0, marginLeft: 0, marginRight: 0, height: ["auto", 0]}}>
                             Copié dans le presse papier.
                         </motion.div>
