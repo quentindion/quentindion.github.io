@@ -84,7 +84,7 @@
 
 @utility button {
     @apply relative inline-flex items-center text-sm font-semibold px-5 h-10 gap-2 cursor-pointer no-underline
-        rounded-2xl ring-1 ring-border backdrop-blur-xl select-none
+        rounded-2xl ring-1 ring-foreground/10 backdrop-blur-xl select-none
         transition-[scale,color]
         sm:hover:scale-105
         active:scale-95 sm:active:scale-100;

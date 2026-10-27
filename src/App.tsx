@@ -29,6 +29,7 @@ import Card from './components/Card';
 import Timeline from './components/Timeline';
 import { MorphIcon } from "morphicons/react";
 import { Moon, Sun } from "lucide"
+import PatternWaves from './components/PatternWaves';
 
 declare global {
     function isDark(): boolean
@@ -149,9 +150,34 @@ export default function App () {
     }
 
     return <>
-        <div className="relative">
-            <div className="absolute h-screen w-full bg-[radial-gradient(#71717140_1px,transparent_1px)] bg-size-[16px_16px] 
-                mask-[radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+        <div className="absolute flex w-full justify-center">
+            <div className="container h-[75dvh] px-8">
+                <PatternWaves
+                    preset="silk"
+                    color={isDarkMode ? "#ffffff" : "#000000"}
+                    backgroundColor="transparent"
+                    fade="bottom"
+                    interactive={false}
+                    cursorSize={50}
+                    cursorStrength={0.6}
+                    pattern="glyph"
+                    wave="silk"
+                    spacing={14}
+                    markSize={1}
+                    depth={1}
+                    light={0}
+                    shine={1.5}
+                    contrast={1.75}
+                    speed={0.35}
+                    scale={1}
+                    direction={129}
+                    opacity={1}
+                    fadeSize={1}
+                    characters=".O01"
+                    intro
+                    paused={false}
+                />
+            </div>
         </div>
         <article className="container p-0 grid grid-cols-[1rem_1fr_1rem] md:grid-cols-[2rem_1fr_2rem]">
             <div className="min-w-4 md:min-w-8 bg-dashed border-x border-border" />
@@ -187,16 +213,21 @@ export default function App () {
                     </div>
                 </div>
 
-                <section className="relative mt-20 md:mt-32 px-0 flex flex-col items-start *:backdrop-blur-lg">
-                    <span className="font-medium text-lg px-4 py-2 text-muted motion-fade-up">
-                        Hello <img src={wavingHand} loading="lazy" alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
-                    </span>
-                    <h1 className="inline-block px-4 py-2 z-1 motion-fade-up">
-                        Lead Web <span className="relative drop-shadow-lg drop-shadow-foreground/50">Developer</span>
-                    </h1>
-                    <p className="font-medium text-lg px-4 py-2 max-w-(--breakpoint-md) text-muted motion-fade-up">
-                        Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.
-                    </p>
+                <section className="relative mt-20 md:mt-32 px-0 flex flex-col place-self-start backdrop-blur-lg">
+                    <div className="flex flex-col items-start">
+                        <div className="absolute w-full lg:w-[calc(100%+1rem)] h-px bg-foreground/10 left-0" />
+                        <span className="font-medium text-lg px-4 py-2 text-muted motion-fade-up">
+                            Hello <img src={wavingHand} loading="lazy" alt="Waving hand" className="inline size-8 align-text-bottom" />, je suis Quentin Dion
+                        </span>
+                        <h1 className="inline-block px-4 py-2 z-1 motion-fade-up">
+                            Lead Web <span className="relative drop-shadow-lg drop-shadow-foreground/50">Developer</span>
+                        </h1>
+                        <p className="font-medium text-lg px-4 py-2 max-w-(--breakpoint-md) text-muted motion-fade-up">
+                            Depuis {seniority} ans, passionné d’informatique et des nouvelles technologies qui font le web d'aujourd'hui.
+                        </p>
+                        <div className="absolute w-full lg:w-[calc(100%+1rem)] h-px bg-foreground/10 bottom-0 left-0" />
+                        <div className="absolute w-0 lg:w-px h-[calc(100%+2rem)] bg-foreground/10 -top-4 right-0" />
+                    </div>
                 </section>
 
                 <section className="relative pb-4 mt-20 md:mt-32 backdrop-blur-lg">
