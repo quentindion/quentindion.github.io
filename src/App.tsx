@@ -158,22 +158,22 @@ export default function App () {
                     backgroundColor="transparent"
                     fade="bottom"
                     interactive={false}
-                    cursorSize={50}
-                    cursorStrength={0.6}
+                    cursorSize={0}
+                    cursorStrength={0}
                     pattern="glyph"
                     wave="silk"
                     spacing={14}
                     markSize={1}
                     depth={1}
                     light={0}
-                    shine={1.5}
-                    contrast={1.75}
+                    shine={0.8}
+                    contrast={1.2}
                     speed={0.35}
                     scale={1}
-                    direction={129}
+                    direction={128}
                     opacity={1}
-                    fadeSize={1}
-                    characters=".O01"
+                    fadeSize={0.5}
+                    characters=".oO01l"
                     intro
                     paused={false}
                 />
