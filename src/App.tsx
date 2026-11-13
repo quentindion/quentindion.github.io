@@ -150,8 +150,15 @@ export default function App () {
     }
 
     return <>
+        <svg width="0" height="0" aria-hidden="true" className="absolute">
+            <filter id="liquid-glass-filter" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="3" result="noise" />
+                <feGaussianBlur in="noise" stdDeviation="5" result="softMap" />
+                <feDisplacementMap in="SourceGraphic" in2="softMap" scale="200" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </svg>
         <div className="absolute flex w-full justify-center">
-            <div className="container h-[75dvh] px-8">
+            <div className="container h-240 px-8">
                 <PatternWaves
                     preset="silk"
                     color={isDarkMode ? "#ffffff" : "#000000"}
@@ -213,7 +220,7 @@ export default function App () {
                     </div>
                 </div>
 
-                <section className="relative mt-20 md:mt-32 px-0 flex flex-col place-self-start backdrop-blur-lg">
+                <section className="relative mt-20 md:mt-32 px-0 flex flex-col place-self-start bg-glass">
                     <div className="flex flex-col items-start">
                         <div className="absolute w-full lg:w-[calc(100%+1rem)] h-px bg-foreground/10 left-0" />
                         <span className="font-medium text-lg px-4 py-2 text-muted motion-fade-up">
@@ -230,7 +237,7 @@ export default function App () {
                     </div>
                 </section>
 
-                <section className="relative pb-4 mt-20 md:mt-32 backdrop-blur-lg">
+                <section className="relative pb-4 mt-20 md:mt-32 bg-glass">
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                     <h2 className="p-4 motion-fade-up"><RulerCrossPen className="size-8" /> Mes outlis</h2>
                     <InfiniteLoops className="mask-x-from-90% mask-x-to-100% motion-fade" duration={20} direction="left">
@@ -241,7 +248,7 @@ export default function App () {
                     <div className="absolute left-[-100vw] w-[200vw] bottom-0 h-px bg-border" />
                 </section>
 
-                <section className="relative mt-20 md:mt-32 backdrop-blur-lg">
+                <section className="relative mt-20 md:mt-32 bg-glass">
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                     <h2 className="p-4 motion-fade-up"><StarsMinimalistic className="size-8" /> Compétences</h2>
                     <div className="flex flex-wrap items-stretch justify-start gap-4 px-4 pb-4">
@@ -315,21 +322,21 @@ export default function App () {
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
-                <section className="relative mt-20 md:mt-32">
+                <section className="relative mt-20 md:mt-32 bg-glass">
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                     <h2 className="p-4 motion-fade-up"><History2 className="size-8" /> Expériences</h2>
                     <Timeline items={experiences} className="mx-4" />
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
-                <section className="relative mt-20 md:mt-32">
+                <section className="relative mt-20 md:mt-32 bg-glass">
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                     <h2 className="p-4 motion-fade-up"><SquareAcademicCap2 className="size-8" /> Formations</h2>
                     <Timeline items={training} className="mx-4" />
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                 </section>
 
-                <section id="contact" className="relative mt-20 md:mt-32">
+                <section id="contact" className="relative mt-20 md:mt-32 bg-glass">
                     <div className="absolute left-[-100vw] w-[200vw] h-px bg-border" />
                     <h2 className="p-4 mb-0 motion-fade-up"><Letter className="size-8" /> Contact</h2>
                     <p className="pb-4 px-4">

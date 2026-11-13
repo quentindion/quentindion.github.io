@@ -84,7 +84,7 @@
 
 @utility button {
     @apply relative inline-flex items-center text-sm font-semibold px-5 h-10 gap-2 cursor-pointer no-underline
-        rounded-2xl ring-1 ring-foreground/10 backdrop-blur-xl select-none
+        rounded-2xl ring-1 ring-foreground/15 bg-glass select-none
         transition-[scale,color]
         sm:hover:scale-105
         active:scale-95 sm:active:scale-100;
@@ -105,20 +105,16 @@
     --spotlight-offset: 30px;
 
     --spotlight-cold: radial-gradient(
-        160rem circle at var(--spotlight-x) var(--spotlight-y) in oklab,
-        --theme(--color-rose-500 / 100%),
-        --theme(--color-red-500 / 100%),
-        --theme(--color-orange-500 / 100%),
+        200rem circle at var(--spotlight-x) var(--spotlight-y) in oklab,
+        --theme(--color-pink-500 / 100%),
         --theme(--color-amber-500 / 100%),
         --theme(--color-yellow-500 / 100%),
         --theme(--color-lime-500 / 100%),
-        --theme(--color-green-500 / 100%),
         --theme(--color-emerald-500 / 100%),
         --theme(--color-teal-500 / 100%),
         --theme(--color-cyan-500 / 100%),
-        --theme(--color-sky-500 / 100%),
         --theme(--color-blue-500 / 75%),
-        --theme(--color-indigo-500 / 50%),
+        --theme(--color-violet-500 / 50%),
         --theme(--color-border / 100%) 10%
     );
 
@@ -160,7 +156,8 @@
         );
     }
 
-    @apply relative p-px rounded-xl transition-colors shadow-xs [background:var(--spotlight-cold),var(--spotlight-warm)]
+    @apply relative p-px rounded-xl transition-colors shadow-xs 
+        [background:var(--spotlight-cold),var(--spotlight-warm)]
         dark:bg-blend-soft-light
         before:content-[''] before:size-full before:pointer-events-none before:absolute before:top-0 before:left-0
         before:[background:var(--spotlight-cold-light),var(--spotlight-warm-light)]
@@ -209,3 +206,8 @@
 }
 
 @utility bg-ambilight { @apply drop-shadow-xl bg-radial-[100%_150%_at_30%_30%] from-transparent from-30%; }
+
+@utility bg-glass {
+    backdrop-filter: blur(6px) url(#liquid-glass-filter);
+    -webkit-backdrop-filter: blur(6px);
+}
