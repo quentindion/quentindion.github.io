@@ -208,6 +208,10 @@
 @utility bg-ambilight { @apply drop-shadow-xl bg-radial-[100%_150%_at_30%_30%] from-transparent from-30%; }
 
 @utility bg-glass {
-    backdrop-filter: blur(6px) url(#liquid-glass-filter);
     -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+
+    @supports (backdrop-filter: url(#x)) {
+        backdrop-filter: blur(6px) url(#liquid-glass-filter);
+    }
 }
